@@ -578,6 +578,25 @@ body.need-login>*:not(.login-ov){visibility:hidden}
 .nv-box{background:#fff;border-radius:16px;max-width:860px;width:100%;max-height:85vh;overflow:auto;padding:16px 18px;box-shadow:0 20px 50px -10px rgba(0,0,0,.4)}
 .nv-bh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font:700 1rem var(--f-tit);color:var(--cafe)}
 .nv-adm select{padding:4px 6px;border:1px solid #DCCFC2;border-radius:6px}
+.cal-chip-ok{background:#F3FAF7!important;border-color:#BCF0DA!important;color:#1f5e3a!important}.cal-chip-ok small{color:#2E7D4F!important}
+.sug-bar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#FFF8EC;border:1px solid #f0d9a8;border-left:4px solid var(--dourado);border-radius:10px;padding:9px 12px;margin:8px 0 10px;font-size:.84rem;color:var(--cafe)}
+/* v38 · painel admin */
+.nav-adm{display:none}body.modo-admin .nav-adm{display:inline-flex;color:var(--vermelho)!important}body.modo-admin .nav-cons{display:none}
+.adm-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:12px}.adm-t{font:700 1.3rem var(--f-tit);color:var(--cafe)}
+.adm-kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.adm-k{background:#fff;border:1px solid var(--borda);border-top:4px solid var(--c);border-radius:14px;padding:10px 14px;display:flex;flex-direction:column;box-shadow:var(--sombra)}
+.adm-k b{font:700 1.45rem var(--f-num);color:var(--c)}.adm-k span{font:700 .7rem var(--f-txt);text-transform:uppercase;letter-spacing:.04em;color:var(--cinza)}.adm-k small{font-size:.72rem;color:var(--cinza);margin-top:2px}
+.adm-tabs{display:flex;gap:2px;flex-wrap:wrap;align-items:center;background:#EFE6DC;border-radius:10px;padding:3px;margin-bottom:10px}.adm-tabs .seg{padding:8px 12px;font-size:.82rem}
+.adm-busca{margin-left:auto;padding:6px 10px;border:1px solid #DCCFC2;border-radius:8px;font-size:.84rem;min-width:200px}
+.adm-tab td{vertical-align:middle}.adm-sel{padding:4px 6px;border:1px solid #DCCFC2;border-radius:6px;font-size:.8rem;max-width:200px}
+.adm-bar{height:4px;background:var(--neutro);border-radius:99px;overflow:hidden;margin-top:3px;min-width:60px}.adm-bar i{display:block;height:100%}
+.adm-nt{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:10px}.adm-nt div{background:#fff;border:1px solid var(--borda);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column}
+.adm-nt b{font:700 .8rem var(--f-txt);color:var(--cafe)}.adm-nt span{font:700 1.15rem var(--f-num);color:#2E7D4F}.adm-nt small{font-size:.66rem;color:var(--cinza)}
+.adm-form{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:#fff;border:1px solid var(--borda);border-radius:12px;padding:10px 12px;margin-bottom:10px}.adm-form.col{flex-direction:column;align-items:stretch;border:none;padding:0}
+.adm-form input,.adm-form select{padding:7px 9px;border:1px solid #DCCFC2;border-radius:8px;font-size:.84rem}
+.adm-cads{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}.adm-card{background:#fff;border:1px solid var(--borda);border-radius:14px;padding:14px 16px;box-shadow:var(--sombra)}
+.adm-card h4{font:700 .95rem var(--f-tit);color:var(--cafe);margin-bottom:6px}.adm-card input[type=file]{margin:8px 0}
+.adm-k small b{font:700 .72rem var(--f-txt)!important}
 .cv-save{position:sticky;bottom:8px;z-index:4;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#fff;border:1px solid #BCF0DA;border-left:4px solid #2E7D4F;border-radius:12px;padding:10px 14px;box-shadow:0 10px 24px -10px rgba(42,26,18,.25);font-size:.84rem}
 </style>
 </head>
@@ -589,13 +608,13 @@ body.need-login>*:not(.login-ov){visibility:hidden}
     <p class="obs" style="margin-bottom:16px">Seus dados ficam salvos na nuvem e aparecem em qualquer computador ou celular em que você entrar.</p>
     <form onsubmit="event.preventDefault();entrar()">
       <div class="fg" id="lg-nome-fg" style="display:none"><label>Nome completo</label><input id="lg-nome" autocomplete="name" placeholder="Ex: Iago Pin"></div>
-      <div class="fg"><label>E-mail</label><input id="lg-email" type="email" autocomplete="email" placeholder="nome@empresa.com"></div>
+      <div class="fg"><label>Usuário ou e-mail</label><input id="lg-email" type="text" autocomplete="username" autocapitalize="none" placeholder="ex.: nestle"></div>
       <div class="fg"><label>Senha</label><input id="lg-senha" type="password" autocomplete="current-password" placeholder="mínimo 6 caracteres"></div>
       <div id="lg-msg" class="lg-msg"></div>
       <button id="lg-btn" class="btn btn-primary" type="submit" style="width:100%;justify-content:center;margin-top:6px">Entrar</button>
     </form>
     <p class="obs" id="lg-alt" style="margin-top:12px"></p>
-    <p class="obs" style="margin-top:10px">🔒 Login seguro (Supabase). Novos cadastros são liberados pelo administrador. Depois do primeiro acesso, o app funciona também sem internet e sincroniza quando a conexão volta.</p>
+    <p class="obs" style="margin-top:10px">🔒 Login seguro (Supabase). Novos acessos são liberados pelo administrador. Depois do primeiro acesso, o app funciona também sem internet e sincroniza quando a conexão volta.</p>
   </div>
 </div>
 
@@ -606,12 +625,12 @@ body.need-login>*:not(.login-ov){visibility:hidden}
     <span class="sub">Recomendação de Adubação por Talhão</span>
   </div>
   <div class="header-right">
-    <nav class="topnav"><button onclick="ir('v-dash')">Painel</button><button onclick="ir('v-bi')">📊 Dashboard</button><button onclick="ir('v-analise')">Análise &amp; Recomendação</button><button onclick="ir('v-talhao')">Fazendas &amp; Talhões</button><button onclick="ir('v-historico')">Histórico</button></nav>
+    <nav class="topnav"><button class="nav-adm" onclick="ir('v-admin')">🛡️ Admin</button><button onclick="ir('v-dash')">Painel</button><button onclick="ir('v-bi')">📊 Dashboard</button><button class="nav-cons" onclick="ir('v-analise')">Análise &amp; Recomendação</button><button onclick="ir('v-talhao')">Fazendas &amp; Talhões</button><button onclick="ir('v-historico')">Histórico</button></nav>
 
     <div class="consultor-box">
       <label>Consultor (ATS)</label>
       <input id="consultorInput" placeholder="Seu nome" readonly title="Definido pelo login">
-      <span id="nv-st"></span><button id="btnAdmin" class="btn btn-sec btn-sm" style="display:none" onclick="abrirAdmin()">👥 Usuários</button><span id="userMail" class="obs" style="max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+      <span id="nv-st"></span><button id="btnAdmin" class="btn btn-sec btn-sm" style="display:none" onclick="abrirAdmin()">🛡️ Painel Admin</button><span id="userMail" class="obs" style="max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
       <button class="btn btn-sec btn-sm" style="padding:4px 10px" onclick="sair()">Sair</button>
     </div>
     <button class="header-back" id="btnVoltar" onclick="voltar()">← Voltar</button>
@@ -759,6 +778,9 @@ body.need-login>*:not(.login-ov){visibility:hidden}
   <div id="h-list"></div>
 </div>
 
+<!-- PAINEL ADMIN -->
+<div class="view" id="v-admin"><div id="adm-body"></div></div>
+
 <!-- DASHBOARD -->
 <div class="view" id="v-bi">
   <div class="bi-head">
@@ -829,6 +851,7 @@ function ir(v){document.getElementById(cur).classList.remove('active');document.
   if(v==='v-exportar'){popFazFilter('e-faz');}
   if(v==='v-bi'){const sv=val('bi-faz');popFazFilter('bi-faz');setv('bi-faz',sv);renderBI();}
   if(v==='v-fazenda'){renderFazendas();}
+  if(v==='v-admin'){admRender();}
 }
 function voltar(){ir(cur==='v-exec'||cur==='v-cal'?'v-historico':'v-dash');}
 
@@ -1039,12 +1062,12 @@ const CATALOGO=[
   {id:'super_triplo',nome:'Superfosfato Triplo',c:{P:41,Ca:12}},
   {id:'kcl',nome:'Cloreto de Potássio (KCl)',c:{K:60}},
   {id:'sulf_pot',nome:'Sulfato de Potássio',c:{K:50,S:17}},
-  {id:'nitrato_ca',nome:'Nitrato de Cálcio',c:{N:15,Ca:27}},
+  {id:'nitrato_ca',nome:'Nitrato de Cálcio',c:{N:15.5,Ca:19}},
   {id:'sulf_mg',nome:'Sulfato de Magnésio',c:{Mg:9.5,S:13}},
   {id:'nitrato_mg',nome:'Nitrato de Magnésio',c:{N:11,Mg:9}},
   {id:'calcario',nome:'Calcário (calcítico / magnesiano / dolomítico)',calc:true,c:{}},
   {id:'calc_dolo',nome:'Calcário Dolomítico',c:{Ca:30,Mg:18},hide:true},
-  {id:'gesso',nome:'Gesso Agrícola',c:{Ca:26,S:15}},
+  {id:'gesso',nome:'Gesso Agrícola',c:{Ca:18,S:15}},
   {id:'f_190419',nome:'Formulado 19-04-19',c:{N:19,P:4,K:19}},
   {id:'f_180018',nome:'Formulado 18-00-18',c:{N:18,K:18}},
   {id:'ac_borico',nome:'Ácido Bórico',c:{B:17}},
@@ -1656,8 +1679,21 @@ function renderResultados(){
       </div>
     </div>`;
   }).join('');
-  analiseAtual.resultados.forEach((r,ri)=>{renderFertRows(ri);recalcFert(ri);});
+  analiseAtual.resultados.forEach((r,ri)=>{if(!r.fertilizantes.length&&!r._sugOk){r.fertilizantes=sugerirFerts(r);r._sugOk=true;}renderFertRows(ri);recalcFert(ri);});
 }
+function sugerirFerts(r){const nec=r.nec||{};const q=k=>(+nec[k]||0)>0.05;const L=[];
+  const add=(prodId,guia)=>{if(!catById(prodId)||L.some(f=>f.prodId===prodId))return;L.push({prodId,guia:guia||'auto',locked:false,qtd:'',formula:'20-00-20',_sug:true});};
+  if(ncPrnt100(r)>0){const f={prodId:'calcario',guia:'auto',locked:false,qtd:'',data:'',_sug:true};calcDefaults(r,f);L.push(f);}
+  if(q('P'))add('map','P');if(q('K'))add('kcl','K');if(q('S'))add(q('N')?'sulf_amon':'gesso','S');if(q('N'))add('ureia','N');
+  if(q('Mg')&&!ncPrnt100(r))add('sulf_mg','Mg');
+  if(q('B'))add('ac_borico','B');if(q('Zn'))add('sulf_zn','Zn');if(q('Cu'))add('sulf_cu','Cu');if(q('Mn'))add('sulf_mn','Mn');if(q('Fe'))add('sulf_fe','Fe');
+  return L;}
+function aplicarSugestao(ri,forcar){const r=analiseAtual.resultados[ri];
+  const go=()=>{r.fertilizantes=sugerirFerts(r);r._sugOk=true;renderFertRows(ri);recalcFert(ri);
+    if(forcar)toast(r.fertilizantes.length?`${r.fertilizantes.length} fertilizante(s) sugerido(s) — edite à vontade.`:'Nenhum nutriente precisa de correção.');};
+  if(forcar&&r.fertilizantes.length)confirmar('Refazer sugestão','Substituir os fertilizantes atuais pela sugestão automática?',go);else go();}
+function sugBanner(r,ri){const nuts=Object.keys(r.nec||{}).filter(k=>(+r.nec[k]||0)>0.05).map(k=>NUT_LABEL[k]);
+  return `<div class="sug-bar"><span>✨ <b>Sugestão automática</b> para corrigir ${nuts.length?nuts.join(', '):'—'}${ncPrnt100(r)>0?' + calagem':''}. Troque o produto na lista, fixe doses, adicione ou remova à vontade — o cálculo refaz sozinho.</span><button class="btn btn-sec btn-sm" onclick="aplicarSugestao(${ri},true)">↻ Refazer sugestão</button></div>`;}
 function addFert(ri){analiseAtual.resultados[ri].fertilizantes.push({prodId:'ureia',guia:'auto',locked:false,qtd:'',formula:'20-00-20'});renderFertRows(ri);recalcFert(ri);}
 function calcDefaults(r,f){f.tipo=f.tipo||'dolomitico';if(!f.prnt){const l=(r.linhas||[]).find(x=>/^Calagem/.test(x.nut)&&x.dose);const m=l&&String(l.dose.unidade||'').match(/PRNT\s*(\d+)/);f.prnt=m?+m[1]:100;}}
 function addCalc(ri){const r=analiseAtual.resultados[ri];const f={prodId:'calcario',guia:'auto',locked:false,qtd:'',data:''};calcDefaults(r,f);r.fertilizantes.unshift(f);renderFertRows(ri);recalcFert(ri);}
@@ -1665,8 +1701,9 @@ function rmFert(ri,i){analiseAtual.resultados[ri].fertilizantes.splice(i,1);rend
 function renderFertRows(ri){
   const r=analiseAtual.resultados[ri];const el=document.getElementById('ferrows_'+ri)||document.getElementById('fertrows_'+ri);
   const dicaCal=ncPrnt100(r)>0&&!r.fertilizantes.some(isCalc)?`<div class="inst" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">🪨 Calagem recomendada: <b>${ppN(ncPrnt100(r),2)} t/ha (PRNT 100%)</b>. Escolha o calcário para contabilizar Ca e Mg. <button class="btn btn-sec btn-sm" onclick="addCalc(${ri})">+ Adicionar calcário</button></div>`:'';
-  if(!r.fertilizantes.length){el.innerHTML=dicaCal+'<p style="color:var(--cinza);font-size:.85rem;padding:6px 0">Nenhum fertilizante selecionado. A necessidade calculada é mostrada abaixo.</p>';return;}
-  el.innerHTML=dicaCal+r.fertilizantes.map((f,i)=>{
+  const _sb=sugBanner(r,ri);
+  if(!r.fertilizantes.length){el.innerHTML=_sb+dicaCal+'<p style="color:var(--cinza);font-size:.85rem;padding:6px 0">Nenhum fertilizante selecionado. A necessidade calculada é mostrada abaixo.</p>';return;}
+  el.innerHTML=_sb+dicaCal+r.fertilizantes.map((f,i)=>{
     const cat=catById(f.prodId);const cc=compOf(f);
     const guiaOpts=['<option value="auto">Auto (nutriente limitante)</option>'].concat(PRIORIDADE.filter(k=>cc[k]>0).map(k=>`<option value="${k}"${f.guia===k?' selected':''}>${NUT_LABEL[k]}</option>`)).join('');
     const compStr=Object.keys(cc).filter(k=>cc[k]>0).map(k=>`${NUT_LABEL[k]} ${cc[k]}%`).join(' · ')||(cat&&cat.custom?'<span style="color:var(--alerta)">informe as garantias abaixo</span>':'');
@@ -2105,12 +2142,21 @@ function calDiag(r,fo){const suf=(FOLIAR_SUF[r.talhao.cultura]||{})[fo.fen]||{};
   return {def,outros};}
 /* situação da safra: aplicado (real) e plano pendente */
 /* aplicações sem marcação com data ANTES da coleta são consideradas feitas conforme o plano (aviso na tela) */
+function calItComp(it){if(it.f)return {c:compOf(it.f),m:1};
+  if(it.k==='ges')return {c:{Ca:18,S:15},m:1};
+  if(/^cal/.test(it.k)){const t=CALC_TIPOS.dolomitico;return {c:{Ca:+(t.cao*0.715).toFixed(1),Mg:+(t.mgo*0.603).toFixed(1)},m:it.un==='t/ha'?1000:1};}
+  return null;}
+function calCorretivo(a,ri){const o={Ca:0,Mg:0,S:0};const ex=(a.execucao||{})[ri]||{};
+  execItens(a,ri).filter(it=>it.fase==='Correção'||/^cal|^ges/.test(it.k)).forEach(it=>{const C=calItComp(it);if(!C)return;const e=ex[it.k]||{};if(e.st==='nao')return;
+    const q=(e.st==='sim'&&e.kg!==''&&e.kg!=null?parseFloat(e.kg):it.rec)*C.m;Object.keys(o).forEach(n=>o[n]+=q*(C.c[n]||0)/100);});
+  return o;}
 function calBase(a,ri,dataCol){const its=execItens(a,ri);const ex=(a.execucao||{})[ri]||{};const apl={},plan={};CAL_NUTS.forEach(n=>{apl[n]=0;plan[n]=0;});const pend=[],antes=[];
   const dc=parseIso(dataCol||((a.calDraft||{}).data)||'');
-  its.forEach(it=>{if(!it.f)return;const c=compOf(it.f);const e=ex[it.k]||{};
-    if(e.st==='sim'){const kg=parseFloat(e.kg)||0;CAL_NUTS.forEach(n=>apl[n]+=kg*(c[n]||0)/100);}
-    else if(e.st!=='nao'){if(dc&&it.data&&parseIso(it.data)<dc){antes.push(it);CAL_NUTS.forEach(n=>apl[n]+=it.rec*(c[n]||0)/100);}
-      else{pend.push(it);CAL_NUTS.forEach(n=>plan[n]+=it.rec*(c[n]||0)/100);}}});
+  its.forEach(it=>{const C=calItComp(it);if(!C)return;const c=C.c,m=C.m;const e=ex[it.k]||{};
+    if(e.st==='sim'){const kg=(parseFloat(e.kg)||0)*m;CAL_NUTS.forEach(n=>apl[n]+=kg*(c[n]||0)/100);}
+    else if(e.st!=='nao'){if(dc&&it.data&&parseIso(it.data)<dc){antes.push(it);CAL_NUTS.forEach(n=>apl[n]+=it.rec*m*(c[n]||0)/100);}
+      else if(it.f){pend.push(it);CAL_NUTS.forEach(n=>plan[n]+=it.rec*(c[n]||0)/100);}
+      else CAL_NUTS.forEach(n=>plan[n]+=it.rec*m*(c[n]||0)/100);}});
   return {apl,plan,pend,antes};}
 function calRec(aid,ri){const R=CALREC[aid]=CALREC[aid]||{};if(R[ri])return R[ri];
   const a=calA(aid);const d=a.calDraft&&a.calDraft.rec&&a.calDraft.rec[ri];
@@ -2131,7 +2177,7 @@ function calRec(aid,ri){const R=CALREC[aid]=CALREC[aid]||{};if(R[ri])return R[ri
    Critérios editáveis (CAL_DEF / CAL_DEF_MAX). O consultor pode sobrescrever qualquer valor.
    ============================================================ */
 const CAL_DEF={Ca:[30,20],Mg:[15,10],B:[2,1],Zn:[5,3],Cu:[4,2],Mn:[6,3],Fe:[5,5]}; // kg/ha do elemento [muito baixo, baixo]
-const CAL_DEF_MAX=.5,CAL_DEF_DRIS=.1,CAL_DEF_SEV=.2;
+const CAL_DEF_MAX=.5,CAL_DEF_DRIS=.1,CAL_DEF_SEV=.2,CAL_DEF_LIM=.1;
 function calMeta(aid,ri){const a=calA(aid);const r=a.resultados[ri];const R=calRec(aid,ri);const P=CALPREV[aid]||{};
   const B=calBase(a,ri,P.dataCol);const X=(P.res||[]).find(y=>y.ri===ri);const def={};((X&&X.dg.def)||[]).forEach(d=>def[d.n]=d);
   const base=r.necSolo||r.nec||{};const prod=parseFloat(r.prod)||0;const meta={},info={};
@@ -2140,7 +2186,10 @@ function calMeta(aid,ri){const a=calA(aid);const r=a.resultados[ri];const R=calR
     if(d){const dr=d.falta>0&&d.lo>0?Math.min(CAL_DEF_MAX,d.falta/d.lo):CAL_DEF_DRIS;let add=0;
       if(['N','P','K','S'].includes(n)){let ref=base[n]||0;if(!ref&&n==='K')ref=Math.round(prod*K_EXPORT);if(!ref&&n==='N'){const rN=calcDose(r.talhao.cultura,r.talhao.estagio,'n',null,null,prod);ref=rN?rN.dose:0;}
         add=ref*dr;why=`plano ${ppN(pl)} + ${Math.round(dr*100)}% de ${ppN(ref)} (folha ${Math.round(dr*100)}% abaixo do ideal)`;}
-      else if(CAL_DEF[n]){add=CAL_DEF[n][dr>=CAL_DEF_SEV?0:1];why=`plano ${ppN(pl)} + correção ${ppN(add)} (folha ${d.falta?Math.round(dr*100)+'% abaixo':'déficit DRIS'})`;}
+      else if(CAL_DEF[n]){const corr=(n==='Ca'||n==='Mg')?calCorretivo(a,ri)[n]:0;const drisDef=(d.idx!=null&&d.idx<=-(X&&X.fo?X.fo.thr:5));
+        if(corr>=CAL_DEF[n][0]){add=0;why=`suprido pela calagem/gessagem da safra (${ppN(corr)} kg/ha de ${n}) — confirmar na próxima folha`;d.sup='calagem';}
+        else if(d.falta>0&&dr<CAL_DEF_LIM&&!drisDef){add=0;why=`limítrofe (${Math.round(dr*100)}% abaixo, DRIS equilibrado) — monitorar`;d.sup='limitrofe';}
+        else{add=Math.max(0,CAL_DEF[n][dr>=CAL_DEF_SEV?0:1]-corr);why=`plano ${ppN(pl)} + correção ${ppN(add)} (folha ${d.falta?Math.round(dr*100)+'% abaixo':'déficit DRIS'}${corr>0.05?`; descontado ${ppN(corr)} da calagem`:''})`;}}
       v=pl+add;}
     v=+v.toFixed(n==='B'||n==='Zn'||n==='Cu'||n==='Mn'||n==='Fe'?2:1);
     const ed=R.ed[n];if(ed!=null&&ed!==''){info[n]={auto:v,why,ed:true};v=+ed;}else info[n]={auto:v,why,ed:false};
@@ -2152,7 +2201,9 @@ function calSolve(meta,prods){
   const saldo={};CAL_NUTS.forEach(n=>saldo[n]=+meta[n]||0);
   P.forEach(x=>{if(x.lock){x.q=Math.max(0,parseFloat(x.p.dose));CAL_NUTS.forEach(n=>saldo[n]-=x.q*(x.c[n]||0)/100);}});
   const autos=P.filter(x=>!x.lock);
-  autos.forEach(x=>{x.g=CAL_GUIA_PRI.find(n=>x.c[n]>0&&saldo[n]>0.01)||null;});
+  autos.forEach(x=>{const cand=CAL_GUIA_PRI.filter(n=>x.c[n]>0&&saldo[n]>0.01);
+    const unico=CAL_GUIA_PRI.filter(n=>x.c[n]>0&&meta[n]!=null&&!autos.some(y=>y!==x&&(y.c[n]||0)>0));
+    x.g=(unico.length&&cand.length&&!unico.includes(cand[0])&&autos.some(y=>y!==x&&(y.c[cand[0]]||0)>0))?unico[0]:(cand[0]||null);});
   const grupos=CAL_GUIA.map(g=>autos.filter(x=>x.g===g)).filter(v=>v.length);
   for(let it=0;it<80;it++){let d=0;grupos.forEach(grp=>{const g=grp[0].g;const fora=P.filter(x=>!grp.includes(x)).reduce((s0,x)=>s0+x.q*(x.c[g]||0)/100,0);
       const alvo=Math.max(0,(+meta[g]||0)-fora);grp.forEach(x=>{const q=alvo/grp.length/(x.c[g]/100);d=Math.max(d,Math.abs(q-x.q));x.q=q;});});if(d<0.01)break;}
@@ -2215,7 +2266,7 @@ function calRenderRec(aid,ri){const el=document.getElementById('calrec_'+aid+'_'
   const S=calSolve(META,R.prods);const ds=calSlots(B,dataCol);
   /* A · tabela única: o que era × o que vira (meta editável) */
   const nutsTab=CAL_NUTS.filter(n=>ns.includes(n)||S.sup[n]>0.05||B.plan[n]>0.05);
-  const stFol=n=>{if(defN.includes(n))return '<span class="cv-tag cv-def">falta</span>';if((X.dg.outros&&X.dg.outros.exc||[]).includes(n))return '<span class="cv-tag cv-exc">acima</span>';if((X.dg.outros&&X.dg.outros.ok||[]).includes(n))return '<span class="cv-tag cv-ok">ok</span>';return '<span class="obs">—</span>';};
+  const stFol=n=>{const dd=X.dg.def.find(d=>d.n===n);if(dd&&dd.sup)return `<span class="cv-tag cv-ok" title="${esc((M.info[n]||{}).why||'')}">${dd.sup==='calagem'?'calagem':'limítrofe'}</span>`;if(defN.includes(n))return '<span class="cv-tag cv-def">falta</span>';if((X.dg.outros&&X.dg.outros.exc||[]).includes(n))return '<span class="cv-tag cv-exc">acima</span>';if((X.dg.outros&&X.dg.outros.ok||[]).includes(n))return '<span class="cv-tag cv-ok">ok</span>';return '<span class="obs">—</span>';};
   const linhas=nutsTab.map(n=>{const I=M.info[n]||{auto:0,why:'',ed:false};const pl=B.plan[n],m=META[n]!=null?+META[n]:null,f=S.sup[n];
     const dM=m==null?0:m-pl;const d=m==null?0:f-m;const cls=m==null?'obs':Math.abs(d)<=Math.max(0.5,m*0.02)?'sal-ok':d<0?'sal-def':m>0.05?'sal-exc':'obs';
     const sit=m==null?(f>0.05?'vem junto '+ppN(f):'—'):cls==='sal-ok'?'✓ atendido':d<0?'faltam '+ppN(-d):(m>0.05?'excesso ':'vem junto ')+ppN(d);
@@ -2268,7 +2319,7 @@ function calPreview(aid,silent){const a=calA(aid);if(!a)return;const dataCol=val
   const NM={N:'Nitrogênio',P:'Fósforo',K:'Potássio',Ca:'Cálcio',Mg:'Magnésio',S:'Enxofre',B:'Boro',Cu:'Cobre',Fe:'Ferro',Mn:'Manganês',Zn:'Zinco'};
   const nCal=(a.calibracoes||[]).length+1;
   document.getElementById('calres_'+aid).innerHTML=res.map(x=>`<div class="cal-box"><div class="cal-h">🌿 ${esc(x.r.talhao.nome)} <span class="obs">· folha de ${fmtData(parseIso(dataCol))}</span></div>
-    <div class="cv-diag">${x.dg.def.length?x.dg.def.map(d=>`<span class="cal-chip"><b>${NM[d.n]}</b> ${ppN(d.v)} ${d.un}<small>ideal ${ppN(d.lo)}–${ppN(d.hi)} · ${d.falta?'falta '+ppN(d.falta):'déficit DRIS'}</small></span>`).join('')
+    <div class="cv-diag">${x.dg.def.length?(calMeta(aid,x.ri),x.dg.def).map(d=>d.sup?`<span class="cal-chip cal-chip-ok"><b>${NM[d.n]}</b> ${ppN(d.v)} ${d.un}<small>ideal ${ppN(d.lo)}–${ppN(d.hi)} · ${d.sup==='calagem'?'✓ suprido pela calagem':'limítrofe · monitorar'}</small></span>`:`<span class="cal-chip"><b>${NM[d.n]}</b> ${ppN(d.v)} ${d.un}<small>ideal ${ppN(d.lo)}–${ppN(d.hi)} · ${d.falta?'falta '+ppN(d.falta):'déficit DRIS'}</small></span>`).join('')
       :'<span class="cv-tag cv-ok" style="font-size:.8rem;padding:5px 10px">✅ Nenhum nutriente deficiente — o plano se mantém</span>'}
       ${x.dg.outros.ok.length?`<span class="cv-sum cv-sum-ok">Equilibrados: ${x.dg.outros.ok.join(', ')}</span>`:''}${x.dg.outros.exc.length?`<span class="cv-sum cv-sum-exc">Acima da faixa: ${x.dg.outros.exc.join(', ')}</span>`:''}</div>
     <div id="calrec_${aid}_${x.ri}"></div></div>`).join('')
@@ -3500,13 +3551,16 @@ function lgMsg(t,ok){const e=document.getElementById('lg-msg');e.textContent=t;e
 document.addEventListener('DOMContentLoaded',()=>{carregarConsultor();renderFazendas();});
 carregarConsultor();
 /* =====================================================================
-   v37 · NUVEM (Supabase) — login real + sincronização automática
-   - O app continua funcionando com o cache do navegador (offline).
-   - Toda gravação em fazendas/talhões/análises é enviada ao Supabase.
-   - Sem internet: fica numa fila e sobe sozinho quando a conexão volta.
+   v38 · NUVEM (Supabase) — tabelas em português
+   usuarios · consultores · produtores · fazendas · talhoes · analises
+   - Login por USUÁRIO (ex.: nestle) ou e-mail.
+   - Consultor vê/edita só as fazendas do seu consultor (regra no banco).
+   - Admin: só visualiza + relatórios PDF/XLSX + cadastros e aprovações.
+   - Offline: fila local que sobe sozinha quando a conexão volta.
    ===================================================================== */
 const SB_URL='https://mtrookoinjygojmopjdv.supabase.co';
 const SB_KEY='sb_publishable_gl9Zo1Ze7w2bgFNgQ6lOnw_7cRduH5M';
+const SB_DOM='nescafeplan.app';               // usuário "nestle" → nestle@nescafeplan.app
 const SB_TABS=['fazendas','talhoes','analises'];
 const LS=localStorage;
 const SB={
@@ -3519,50 +3573,81 @@ const SB={
     return s.access_token;},
   async rest(method,path,body,extra){const tk=await this.token();if(!tk)throw new Error('sem sessão');
     const r=await fetch(`${SB_URL}/rest/v1/${path}`,{method,headers:{apikey:SB_KEY,Authorization:'Bearer '+tk,'Content-Type':'application/json',Prefer:'return=minimal',...(extra||{})},body:body?JSON.stringify(body):undefined});
-    if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(j.message||('Erro '+r.status));}
-    const t=await r.text();return t?JSON.parse(t):null;}
+    if(!r.ok){const j=await r.json().catch(()=>({}));const er=new Error(j.message||j.hint||('Erro '+r.status));er.status=r.status;throw er;}
+    const t=await r.text();return t?JSON.parse(t):null;},
+  get(path){return this.rest('GET',path,null,{Prefer:''});},
+  async all(path){let rows=[],de=0;while(true){const pg=await this.get(`${path}${path.includes('?')?'&':'?'}offset=${de}&limit=1000`);rows=rows.concat(pg||[]);if(!pg||pg.length<1000)break;de+=1000;}return rows;}
 };
+function sbEmail(u){u=String(u||'').trim().toLowerCase();return u.includes('@')?u:`${u}@${SB_DOM}`;}
+function nvPerfil(){try{return JSON.parse(LS.getItem('np__perfil')||'null');}catch(e){return null;}}
+function nvAdmin(){const p=nvPerfil();return !!(p&&p.papel==='admin');}
+
+/* ---------- conversão app ⇄ tabelas ---------- */
+const nvNum=v=>{const n=parseFloat(String(v??'').replace(',','.'));return isNaN(n)?null:n;};
+const nvIso=v=>/^\d{4}-\d{2}-\d{2}$/.test(String(v||''))?v:null;
+const NV_NUT=k=>k==='P'?'P2O5':k==='K'?'K2O':k;
+function nvItens(a){const out=[];
+  (a.resultados||[]).forEach((r,ri)=>{let its=[];try{its=execItens(a,ri);}catch(e){}const ex=((a.execucao||{})[ri])||{};const area=nvNum(r.talhao&&r.talhao.area);
+    its.forEach(it=>{const e=ex[it.k]||{};const st=e.st==='sim'?'feito':e.st==='nao'?'nao_feito':'pendente';const apl=st==='feito'?nvNum(e.kg):null;
+      let C=null;try{C=calItComp(it);}catch(x){}const nut={};
+      if(C)Object.keys(C.c).forEach(k=>{const pc=+C.c[k]||0;if(pc<=0)return;nut[NV_NUT(k)]={rec:+((+it.rec||0)*C.m*pc/100).toFixed(3),apl:+((apl||0)*C.m*pc/100).toFixed(3)};});
+      out.push({talhao:r.talhao.nome,talhao_id:r.talhao.id||null,area_ha:area,chave:it.k,etapa:it.fase,data_prevista:nvIso(it.data),insumo:it.nome,via:it.via||'solo',
+        unidade:it.un,dose_recomendada:+it.rec||0,situacao:st,dose_aplicada:apl,data_aplicada:st==='feito'?nvIso(e.data):null,observacao:e.obs||null,nutrientes:nut});});});
+  return out;}
+function nvNec(a){const out=[];(a.resultados||[]).forEach(r=>{const n=r.nec||{};Object.keys(n).forEach(k=>{const v=nvNum(n[k]);if(v>0.05)out.push({talhao_id:r.talhao.id||null,nutriente:NV_NUT(k),kg_ha:+v.toFixed(2)});});});return out;}
+function nvPayload(t,o){
+  if(t==='fazendas')return {nome:o.nome||'—',municipio:o.mun||null,area_ha:nvNum(o.area),dados:o};
+  if(t==='talhoes')return {fazenda_id:o.fazendaId,nome:o.nome||null,cultura:o.cultura||null,estagio:o.estagio||null,area_ha:nvNum(o.area),ano_plantio:nvNum(o.anoPlantio)?Math.round(nvNum(o.anoPlantio)):null,dados:o};
+  return {fazenda_id:o.fazendaId,data_coleta:nvIso(o.data),laboratorio:o.lab||null,base_calculo:o.modo||null,calibracoes:(o.calibracoes||[]).length,dados:o,itens:nvItens(o),necessidades:nvNec(o)};}
+function nvDoBanco(t,r){
+  if(t==='fazendas'){const d=r.dados||{};return {...d,id:r.id,nome:r.nome||d.nome||'',prod:(r.produtores&&r.produtores.nome)||d.prod||'',mun:r.municipio??d.mun??'',area:r.area_ha??d.area??'',codigo:r.codigo_nescafe||'',consultorNome:(r.consultores&&r.consultores.nome)||''};}
+  return {...(r.dados||{}),id:r.id};}
+const NV_SEL={fazendas:'id,codigo_nescafe,nome,municipio,area_ha,dados,produtores(nome),consultores(nome)',talhoes:'id,dados',analises:'id,dados'};
+
 /* ---------- fila de sincronização ---------- */
 const NV={fila(){try{return JSON.parse(LS.getItem('np__fila')||'[]');}catch(e){return[];}},
   setFila(f){LS.setItem('np__fila',JSON.stringify(f));nvStatus();},
   snap(t){try{return JSON.parse(LS.getItem('np__snap_'+t)||'{}');}catch(e){return{};}},
   setSnap(t,o){LS.setItem('np__snap_'+t,JSON.stringify(o));},
   ativo(){return !!SB.sess()&&LS.getItem('np__ok')==='1';},
-  rodando:false,timer:null};
-/* intercepta DB.set: compara com a última versão e enfileira só o que mudou */
+  rodando:false,timer:null,avisoAdm:0};
 const _dbSet=DB.set;
-DB.set=(k,v)=>{_dbSet(k,v);if(!SB_TABS.includes(k)||!NV.ativo())return;
+DB.set=(k,v)=>{
+  if(SB_TABS.includes(k)&&NV.ativo()&&nvAdmin()){ // admin = somente leitura
+    if(Date.now()-NV.avisoAdm>4000){NV.avisoAdm=Date.now();toast('Administrador: modo somente visualização — alterações não são salvas.','info');}return;}
+  _dbSet(k,v);if(!SB_TABS.includes(k)||!NV.ativo())return;
   const snap=NV.snap(k);const f=NV.fila();const vistos=new Set();
   (v||[]).forEach(o=>{if(!o||!o.id)return;vistos.add(o.id);const js=JSON.stringify(o);if(snap[o.id]!==js){snap[o.id]=js;f.push({t:k,op:'up',id:o.id});}});
   Object.keys(snap).forEach(id=>{if(!vistos.has(id)){delete snap[id];f.push({t:k,op:'del',id});}});
   NV.setSnap(k,snap);NV.setFila(f);nvAgendar();};
 function nvAgendar(ms){clearTimeout(NV.timer);NV.timer=setTimeout(nvEnviar,ms==null?800:ms);}
-async function nvEnviar(){if(NV.rodando||!NV.ativo()||!navigator.onLine)return;NV.rodando=true;nvStatus('sync');
+const NV_PRI=x=>x.op==='del'?3+({analises:0,talhoes:1,fazendas:2}[x.t]||0):({fazendas:0,talhoes:1,analises:2}[x.t]||0);
+async function nvEnviar(){if(NV.rodando||!NV.ativo()||!navigator.onLine||nvAdmin())return;NV.rodando=true;nvStatus('sync');
   try{let f=NV.fila();const nuvem=new Set(JSON.parse(LS.getItem('np__nuvem')||'[]'));
-    while(f.length){const it=f[0];
-      /* compacta: só a última operação de cada registro importa */
-      const ult=f.map((x,i)=>[x,i]).filter(([x])=>x.t===it.t&&x.id===it.id).pop()[0];
-      const dados=(DB.get(it.t)||[]).find(o=>o.id===it.id);const key=it.t+'|'+it.id;
-      if(ult.op==='del'||!dados){if(nuvem.has(key)||ult.op==='del'){await SB.rest('DELETE',`${it.t}?id=eq.${encodeURIComponent(it.id)}`);nuvem.delete(key);}}
-      else if(nuvem.has(key)){await SB.rest('PATCH',`${it.t}?id=eq.${encodeURIComponent(it.id)}`,{dados,atualizado:new Date().toISOString()});}
-      else{await SB.rest('POST',`${it.t}?on_conflict=id`,{id:it.id,dados},{Prefer:'return=minimal,resolution=merge-duplicates'});nuvem.add(key);}
+    while(f.length){const it=f.slice().sort((a,b)=>NV_PRI(a)-NV_PRI(b))[0];
+      const ult=f.filter(x=>x.t===it.t&&x.id===it.id).pop();
+      const dados=(DB.get(it.t)||[]).find(o=>o.id===it.id);const key=it.t+'|'+it.id;const q=`${it.t}?id=eq.${encodeURIComponent(it.id)}`;
+      try{
+        if(ult.op==='del'||!dados){await SB.rest('DELETE',q);nuvem.delete(key);}
+        else if(nuvem.has(key)){await SB.rest('PATCH',q,nvPayload(it.t,dados));}
+        else{await SB.rest('POST',`${it.t}?on_conflict=id`,{id:it.id,...nvPayload(it.t,dados)},{Prefer:'return=minimal,resolution=merge-duplicates'});nuvem.add(key);}
+      }catch(e){if(!e.status||e.status>=500)throw e; // rede/servidor: tenta de novo depois
+        const fl=JSON.parse(LS.getItem('np__falhas')||'[]');fl.push({...it,erro:e.message,ts:Date.now()});LS.setItem('np__falhas',JSON.stringify(fl.slice(-50)));
+        toast(`Não foi possível salvar na nuvem (${it.t}): ${e.message}`,'error');}
       f=NV.fila().filter(x=>!(x.t===it.t&&x.id===it.id));NV.setFila(f);LS.setItem('np__nuvem',JSON.stringify([...nuvem]));}
     LS.setItem('np__ultsync',String(Date.now()));nvStatus();}
   catch(e){nvStatus('erro',e.message);if(navigator.onLine)nvAgendar(15000);}
   finally{NV.rodando=false;}}
-/* baixa tudo o que o usuário pode ver e substitui o cache local */
 async function nvBaixar(){const nuvem=[];
-  for(const t of SB_TABS){let rows=[],de=0;
-    while(true){const pg=await SB.rest('GET',`${t}?select=id,owner,dados&order=id&offset=${de}&limit=1000`,null,{Prefer:''});rows=rows.concat(pg||[]);if(!pg||pg.length<1000)break;de+=1000;}
+  for(const t of SB_TABS){const rows=await SB.all(`${t}?select=${NV_SEL[t]}&order=id`);
     const pend=new Set(NV.fila().filter(x=>x.t===t).map(x=>x.id));const loc=DB.get(t)||[];
-    const lista=rows.map(r=>{nuvem.push(t+'|'+r.id);return {...r.dados,id:r.id,_owner:r.owner};});
-    /* mantém versões locais ainda não enviadas */
+    const lista=rows.map(r=>{nuvem.push(t+'|'+r.id);return nvDoBanco(t,r);});
     loc.filter(o=>pend.has(o.id)).forEach(o=>{const i=lista.findIndex(x=>x.id===o.id);if(i>=0)lista[i]=o;else lista.push(o);});
     _dbSet(t,lista);const snap={};lista.forEach(o=>snap[o.id]=JSON.stringify(o));NV.setSnap(t,snap);}
   LS.setItem('np__nuvem',JSON.stringify(nuvem));LS.setItem('np__ultsync',String(Date.now()));}
-/* ---------- status visual ---------- */
 function nvStatus(st,msg){const el=document.getElementById('nv-st');if(!el)return;const n=NV.fila().length;
   if(!SB.sess()){el.innerHTML='';return;}
+  if(nvAdmin()){el.innerHTML='<span class="nv-pill nv-ok" title="Administrador: somente visualização">🛡️ Admin · leitura</span>';return;}
   if(!navigator.onLine){el.innerHTML=`<span class="nv-pill nv-off">● Offline${n?' · '+n+' pendente(s)':''}</span>`;return;}
   if(st==='sync'){el.innerHTML='<span class="nv-pill nv-sync">⟳ Sincronizando…</span>';return;}
   if(st==='erro'){el.innerHTML=`<span class="nv-pill nv-err" title="${esc(msg||'')}">⚠ Erro ao sincronizar${n?' · '+n+' pendente(s)':''}</span>`;return;}
@@ -3570,57 +3655,62 @@ function nvStatus(st,msg){const el=document.getElementById('nv-st');if(!el)retur
   el.innerHTML=`<span class="nv-pill nv-ok" title="Última sincronização: ${u?new Date(u).toLocaleString('pt-BR'):'—'}">☁ Nuvem${n?' · '+n+' pendente(s)':' · salvo'}</span>`;}
 window.addEventListener('online',()=>{nvStatus();nvAgendar(200);});
 window.addEventListener('offline',()=>nvStatus());
-/* ---------- LOGIN (substitui o login local) ---------- */
+
+/* ---------- LOGIN ---------- */
 let LG_MODO='entrar';
 function lgModo(m){LG_MODO=m;document.getElementById('lg-nome-fg').style.display=m==='criar'?'':'none';
-  document.getElementById('lg-btn').textContent=m==='criar'?'Criar conta':'Entrar';
-  document.getElementById('lg-tit').textContent=m==='criar'?'Criar conta':'Acessar a calculadora';
-  document.getElementById('lg-alt').innerHTML=m==='criar'?'Já tem conta? <a href="#" onclick="lgModo(\'entrar\');return false">Entrar</a>':'Primeiro acesso? <a href="#" onclick="lgModo(\'criar\');return false">Criar conta</a> · <a href="#" onclick="lgReset();return false">Esqueci a senha</a>';lgMsg('',true);}
-async function entrar(){const nome=val('lg-nome').trim(),email=val('lg-email').trim().toLowerCase(),senha=val('lg-senha');
+  document.getElementById('lg-btn').textContent=m==='criar'?'Solicitar acesso':'Entrar';
+  document.getElementById('lg-tit').textContent=m==='criar'?'Solicitar acesso':'Acessar a calculadora';
+  document.getElementById('lg-alt').innerHTML=m==='criar'?'Já tem acesso? <a href="#" onclick="lgModo(\'entrar\');return false">Entrar</a>':'Primeiro acesso? <a href="#" onclick="lgModo(\'criar\');return false">Solicitar acesso</a> · <a href="#" onclick="lgReset();return false">Esqueci a senha</a>';lgMsg('',true);}
+async function entrar(){const nome=val('lg-nome').trim(),bruto=val('lg-email').trim(),senha=val('lg-senha');const email=sbEmail(bruto);
   if(LG_MODO==='criar'&&!nome){lgMsg('Informe seu nome completo.');return;}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){lgMsg('E-mail inválido.');return;}
+  if(!bruto||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){lgMsg('Informe seu usuário ou e-mail.');return;}
   if(senha.length<6){lgMsg('A senha deve ter ao menos 6 caracteres.');return;}
   if(!navigator.onLine){lgMsg('Sem internet. O primeiro acesso precisa de conexão.');return;}
   const b=document.getElementById('lg-btn');b.disabled=true;lgMsg('Aguarde…',true);
-  try{if(LG_MODO==='criar'){const j=await SB.auth('signup',{email,password:senha,data:{nome}});
-      if(!j.access_token){lgMsg('Conta criada! Confirme pelo link enviado ao seu e-mail e depois entre.',true);lgModo('entrar');setv('lg-email',email);return;}
+  try{if(LG_MODO==='criar'){const j=await SB.auth('signup',{email,password:senha,data:{nome,usuario:email.split('@')[0]}});
+      if(!j.access_token){lgMsg('Solicitação enviada! Aguarde a aprovação do administrador.',true);lgModo('entrar');setv('lg-email',bruto);return;}
       SB.setSess(j);}
     else{const j=await SB.auth('token?grant_type=password',{email,password:senha});SB.setSess(j);}
     await posLogin(true);setv('lg-senha','');}
-  catch(e){lgMsg(/invalid login/i.test(e.message)?'E-mail ou senha incorretos.':/already registered/i.test(e.message)?'E-mail já cadastrado. Use "Entrar".':/not confirmed/i.test(e.message)?'Confirme seu e-mail pelo link recebido antes de entrar.':e.message);}
+  catch(e){lgMsg(/invalid login/i.test(e.message)?'Usuário ou senha incorretos.':/already registered/i.test(e.message)?'Usuário já cadastrado. Use "Entrar".':/not confirmed/i.test(e.message)?'Acesso ainda não confirmado. Fale com o administrador.':e.message);}
   finally{b.disabled=false;}}
-async function lgReset(){const email=val('lg-email').trim().toLowerCase();if(!email){lgMsg('Digite seu e-mail e clique de novo em "Esqueci a senha".');return;}
-  try{await SB.auth('recover',{email});lgMsg('Enviamos um link de redefinição para '+email+'.',true);}catch(e){lgMsg(e.message);}}
+async function lgReset(){const v=val('lg-email').trim();if(!v){lgMsg('Digite seu usuário/e-mail e clique de novo em "Esqueci a senha".');return;}
+  if(!v.includes('@')){lgMsg('Para usuários sem e-mail, peça ao administrador para redefinir a senha.');return;}
+  try{await SB.auth('recover',{email:sbEmail(v)});lgMsg('Enviamos um link de redefinição para '+v+'.',true);}catch(e){lgMsg(e.message);}}
 async function posLogin(novo){const s=SB.sess();if(!s)return aplicarSessao();
-  let p=null;try{const r=await SB.rest('GET',`perfis?id=eq.${s.user.id}&select=*`,null,{Prefer:''});p=r&&r[0];}
-  catch(e){p=JSON.parse(LS.getItem('np__perfil')||'null');}
-  if(!p){lgMsg('Perfil não encontrado. Rode o SQL de configuração no Supabase.');SB.setSess(null);return;}
+  let p=null;try{const r=await SB.get(`usuarios?id=eq.${s.user.id}&select=*,consultores(nome)`);const u=r&&r[0];
+      if(u)p={id:u.id,email:u.email||s.user.email,usuario:u.usuario,nome:u.nome||u.usuario,papel:u.papel,situacao:u.situacao,aprovado:u.situacao==='aprovado',consultor_id:u.consultor_id,consultor:u.consultores?u.consultores.nome:''};}
+  catch(e){p=nvPerfil();}
+  if(!p){lgMsg('Usuário sem cadastro no banco. Peça ao administrador (ou rode o SQL de configuração).');SB.setSess(null);return;}
   LS.setItem('np__perfil',JSON.stringify(p));
   if(!p.aprovado){LS.setItem('np__ok','0');document.body.classList.add('need-login');
-    lgMsg(`Olá, ${p.nome||p.email}! Seu acesso aguarda aprovação do administrador.`,true);
+    lgMsg(p.situacao==='bloqueado'?'Seu acesso está bloqueado. Fale com o administrador.':`Olá, ${p.nome}! Seu acesso aguarda aprovação do administrador.`,p.situacao!=='bloqueado');
     document.getElementById('lg-alt').innerHTML='<a href="#" onclick="posLogin();return false">↻ Verificar de novo</a> · <a href="#" onclick="sairNuvem();return false">Sair</a>';return;}
-  /* troca de usuário no mesmo PC: guarda dados antigos sem dono como "legado" e limpa o cache */
   const ant=LS.getItem('np__uid');
-  if(ant!==s.user.id){if(!ant&&!LS.getItem('np__legado')){const L={};SB_TABS.forEach(t=>{const v=DB.get(t);if(v&&v.length)L[t]=v;});if(Object.keys(L).length)LS.setItem('np__legado',JSON.stringify(L));}
+  if(ant!==s.user.id){if(!ant&&!LS.getItem('np__legado')&&p.papel!=='admin'){const L={};SB_TABS.forEach(t=>{const v=DB.get(t);if(v&&v.length)L[t]=v;});if(Object.keys(L).length)LS.setItem('np__legado',JSON.stringify(L));}
     SB_TABS.forEach(t=>{_dbSet(t,[]);NV.setSnap(t,{});});LS.removeItem('np__fila');LS.removeItem('np__nuvem');LS.setItem('np__uid',s.user.id);}
   LS.setItem('np__ok','1');DB.sets('sessao',p.email);
   if(navigator.onLine){try{nvStatus('sync');await nvBaixar();}catch(e){toast('Não foi possível baixar da nuvem: '+e.message,'error');}}
   aplicarSessao();nvStatus();nvAgendar(300);
-  try{renderFazendas();if(cur==='v-historico')renderHist();}catch(e){}
-  if(novo)toast(`Bem-vindo(a), ${(p.nome||p.email).split(' ')[0]}!`);}
-function aplicarSessao(){const p=JSON.parse(LS.getItem('np__perfil')||'null');
+  try{renderFazendas();if(cur==='v-historico')renderHist();if(cur==='v-admin')admRender();}catch(e){}
+  if(novo){toast(`Bem-vindo(a), ${String(p.nome).split(' ')[0]}!`);if(p.papel==='admin')ir('v-admin');}
+  if(p.papel!=='admin'&&!p.consultor_id)toast('Seu usuário ainda não está vinculado a um consultor — peça ao administrador para ver suas fazendas.','info');}
+function aplicarSessao(){const p=nvPerfil();
   if(!SB.sess()||!p||!p.aprovado||LS.getItem('np__ok')!=='1'){document.body.classList.add('need-login');setTimeout(()=>{const n=document.getElementById('lg-email');if(n)n.focus();},50);nvStatus();return;}
-  document.body.classList.remove('need-login');DB.sets('consultor',p.nome||p.email);setv('consultorInput',p.nome||p.email);DB.sets('sessao',p.email);
-  const m=document.getElementById('userMail');if(m){m.textContent=p.email+(p.papel==='admin'?' · admin':'');m.title=p.email;}
+  document.body.classList.remove('need-login');document.body.classList.toggle('modo-admin',p.papel==='admin');
+  const nm=p.papel==='admin'?p.nome:(p.consultor||p.nome);DB.sets('consultor',nm);setv('consultorInput',nm);DB.sets('sessao',p.email);
+  const m=document.getElementById('userMail');if(m){m.textContent=(p.usuario||p.email)+(p.papel==='admin'?' · admin':'');m.title=p.email;}
   const ad=document.getElementById('btnAdmin');if(ad)ad.style.display=p.papel==='admin'?'':'none';
   nvLegadoBanner();nvStatus();}
 function sairNuvem(){const n=NV.fila().length;
-  const go=()=>{SB.setSess(null);LS.removeItem('np__perfil');LS.setItem('np__ok','0');localStorage.removeItem('np_sessao');setv('lg-senha','');lgModo('entrar');aplicarSessao();try{ir('v-dash');}catch(e){}};
-  if(n)confirmar('Sair',`Há ${n} alteração(ões) ainda não enviadas à nuvem. Se sair agora, elas serão enviadas no próximo login neste navegador. Sair mesmo assim?`,go);else go();}
+  const go=()=>{SB.setSess(null);LS.removeItem('np__perfil');LS.setItem('np__ok','0');localStorage.removeItem('np_sessao');setv('lg-senha','');lgModo('entrar');document.body.classList.remove('modo-admin');aplicarSessao();try{ir('v-dash');}catch(e){}};
+  if(n)confirmar('Sair',`Há ${n} alteração(ões) ainda não enviadas à nuvem. Elas serão enviadas no próximo login neste navegador. Sair mesmo assim?`,go);else go();}
 function sair(){confirmar('Sair','Encerrar a sessão neste dispositivo?',sairNuvem);}
+
 /* ---------- migração dos dados que estavam só no navegador ---------- */
 function nvLegadoBanner(){const el=document.getElementById('nv-leg');if(!el)return;const L=JSON.parse(LS.getItem('np__legado')||'null');
-  if(!L){el.innerHTML='';return;}const c=t=>(L[t]||[]).length;
+  if(!L||nvAdmin()){el.innerHTML='';return;}const c=t=>(L[t]||[]).length;
   el.innerHTML=`<div class="nv-leg"><div><b>📦 Encontramos dados salvos só neste navegador</b><div class="obs">${c('fazendas')} fazenda(s) · ${c('talhoes')} talhão(ões) · ${c('analises')} análise(s), de antes da nuvem.</div></div>
     <button class="btn btn-primary btn-sm" onclick="nvMigrar()">☁ Enviar meus dados locais</button><button class="btn btn-sec btn-sm" onclick="nvDescartar()">Descartar</button></div>`;}
 function nvMigrar(){const L=JSON.parse(LS.getItem('np__legado')||'null');if(!L)return;let n=0;
@@ -3628,20 +3718,153 @@ function nvMigrar(){const L=JSON.parse(LS.getItem('np__legado')||'null');if(!L)r
   LS.removeItem('np__legado');nvLegadoBanner();nvAgendar(100);try{renderFazendas();if(cur==='v-historico')renderHist();}catch(e){}
   toast(`${n} registro(s) enviados para a nuvem.`);}
 function nvDescartar(){confirmar('Descartar dados locais','Os dados antigos deste navegador não serão enviados à nuvem e serão apagados. Continuar?',()=>{LS.removeItem('np__legado');nvLegadoBanner();});}
-/* ---------- painel do administrador: aprovar usuários ---------- */
-async function abrirAdmin(){let L=[];try{L=await SB.rest('GET','perfis?select=*&order=criado_em.desc',null,{Prefer:''});}catch(e){toast(e.message,'error');return;}
-  const me=SB.sess().user.id;
-  const h=`<div class="nv-adm"><table class="cv-tab"><thead><tr><th>Nome</th><th>E-mail</th><th>Papel</th><th>Situação</th><th></th></tr></thead><tbody>${L.map(p=>`<tr>
-    <td><b>${esc(p.nome||'—')}</b></td><td>${esc(p.email)}</td>
-    <td><select ${p.id===me?'disabled':''} onchange="admSet('${p.id}',{papel:this.value})"><option value="consultor"${p.papel==='consultor'?' selected':''}>Consultor</option><option value="admin"${p.papel==='admin'?' selected':''}>Admin</option></select></td>
-    <td>${p.aprovado?'<span class="cv-tag cv-ok">aprovado</span>':'<span class="cv-tag cv-def">aguardando</span>'}</td>
-    <td>${p.id===me?'<span class="obs">você</span>':p.aprovado?`<button class="btn btn-sec btn-sm" onclick="admSet('${p.id}',{aprovado:false})">Bloquear</button>`:`<button class="btn btn-primary btn-sm" onclick="admSet('${p.id}',{aprovado:true})">✓ Aprovar</button>`}</td></tr>`).join('')}</tbody></table>
-    <p class="obs" style="margin-top:8px">Consultores veem só os próprios dados · admins veem todos. Novos usuários se cadastram pela tela de login e aparecem aqui como "aguardando".</p></div>`;
-  let ov=document.getElementById('nv-adm-ov');if(!ov){ov=document.createElement('div');ov.id='nv-adm-ov';ov.className='nv-ov';document.body.appendChild(ov);}
-  ov.innerHTML=`<div class="nv-box"><div class="nv-bh"><b>👥 Usuários</b><button class="btn btn-sec btn-sm" onclick="document.getElementById('nv-adm-ov').remove()">Fechar</button></div>${h}</div>`;}
-async function admSet(id,patch){try{await SB.rest('PATCH',`perfis?id=eq.${id}`,patch);toast('Atualizado.');abrirAdmin();}catch(e){toast(e.message,'error');}}
+
+/* =====================================================================
+   PAINEL DO ADMINISTRADOR (somente leitura + cadastros + aprovações)
+   ===================================================================== */
+const ADM={tab:'consultores',d:null,busca:''};
+function abrirAdmin(){ir('v-admin');}
+async function admCarregar(){
+  const q=p=>SB.all(p).catch(e=>{console.warn(p,e);return[];});
+  const [cons,faz,exe,nut,usu,lista,apl]=await Promise.all([
+    q('vw_painel_consultores?select=*&order=consultor'),q('vw_fazendas?select=*&order=fazenda'),
+    q('vw_execucao_por_analise?select=*&order=data_coleta.desc'),q('vw_nutrientes_resumo?select=*&order=fazenda'),
+    q('vw_usuarios?select=*&order=criado_em.desc'),q('consultores?select=id,nome&order=nome'),
+    q('vw_execucoes?select=analise_id,codigo_nescafe,fazenda,produtor,consultor,data_coleta,talhao,area_ha,etapa,data_prevista,insumo,via,unidade,dose_recomendada,situacao,dose_aplicada,data_aplicada,observacao,atrasada&order=fazenda')]);
+  ADM.d={cons,faz,exe,nut,usu,lista,apl,ts:Date.now()};}
+async function admRender(force){const el=document.getElementById('adm-body');if(!el)return;
+  if(!nvAdmin()){el.innerHTML='<div class="obs">Acesso restrito aos administradores.</div>';return;}
+  if(!ADM.d||force){el.innerHTML='<div class="obs" style="padding:30px;text-align:center">⟳ Carregando dados do banco…</div>';
+    try{await admCarregar();if(force)await nvBaixar();}catch(e){el.innerHTML=`<div class="inst">Erro ao carregar: ${esc(e.message)}</div>`;return;}}
+  const D=ADM.d;const sum=(L,k)=>L.reduce((s,x)=>s+(+x[k]||0),0);
+  const feitas=sum(D.exe,'feitas'),nao=sum(D.exe,'nao_feitas'),pend=sum(D.exe,'pendentes'),atr=sum(D.exe,'atrasadas');
+  const ades=feitas+nao?Math.round(feitas/(feitas+nao)*100):null;const usPend=D.usu.filter(u=>u.situacao==='pendente').length;
+  const prods=new Set(D.faz.map(f=>f.produtor).filter(Boolean)).size;
+  const K=(v,l,c,s)=>`<div class="adm-k" style="--c:${c}"><b>${v}</b><span>${l}</span>${s?`<small>${s}</small>`:''}</div>`;
+  const kpis=`<div class="adm-kpis">${K(D.lista.length,'Consultores','#2B1D17')}${K(prods,'Produtores','#705A4F')}${K(D.faz.length,'Fazendas','#C69C6D')}
+    ${K(sum(D.faz,'talhoes'),'Talhões','#2471a3',ppN(sum(D.faz,'area_ha'))+' ha')}${K(D.exe.length,'Análises','#6B21A8',sum(D.exe,'calibracoes')+' calibração(ões) foliar')}
+    ${K(feitas,'Aplicações feitas','#2E7D4F',`de ${feitas+nao+pend}`)}${K(pend,'Pendentes','#6E6159',atr?`<b style="color:#B7791F">${atr} atrasada(s)</b>`:'')}
+    ${K(ades!=null?ades+'%':'—','Adesão','#E1001A')}${K(usPend,'Usuários aguardando',usPend?'#B7791F':'#6E6159')}</div>`;
+  const tabs=[['consultores','👥 Consultores'],['fazendas','🏡 Fazendas'],['analises','🧪 Análises & execução'],['nutrientes','🌱 Nutrientes'],['usuarios',`🔑 Usuários${usPend?' ('+usPend+')':''}`],['cadastros','➕ Cadastros & importação']];
+  el.innerHTML=`<div class="adm-top"><div><div class="adm-t">🛡️ Painel do Administrador</div><div class="obs">Visão consolidada de todos os consultores · somente leitura · atualizado ${new Date(D.ts).toLocaleTimeString('pt-BR')}</div></div>
+    <div class="actions" style="margin:0"><button class="btn btn-sec btn-sm" onclick="admRender(true)">↻ Atualizar</button><button class="btn btn-sec btn-sm" onclick="admXLSX()">📊 XLSX completo</button><button class="btn btn-dour btn-sm" onclick="admPDF()">📄 PDF do painel</button></div></div>
+    ${kpis}<div class="adm-tabs">${tabs.map(([k,l])=>`<button class="seg${ADM.tab===k?' on':''}" onclick="ADM.tab='${k}';ADM.busca='';admRender()">${l}</button>`).join('')}
+    ${ADM.tab!=='cadastros'?`<input class="adm-busca" placeholder="🔎 Filtrar…" value="${esc(ADM.busca)}" oninput="ADM.busca=this.value;admTab()">`:''}</div><div id="adm-tab"></div>`;
+  admTab();}
+function admFiltra(L){const b=ADM.busca.trim().toLowerCase();return b?L.filter(x=>Object.values(x).some(v=>v!=null&&typeof v!=='object'&&String(v).toLowerCase().includes(b))):L;}
+function admTabela(cols,L,extra){if(!L.length)return '<div class="obs" style="padding:14px">Nenhum registro.</div>';
+  return `<div class="cv-wrap"><table class="cv-tab adm-tab"><thead><tr>${cols.map(c=>`<th class="${c.n?'n':''}">${c.l}</th>`).join('')}${extra?'<th></th>':''}</tr></thead><tbody>
+  ${L.map(x=>`<tr>${cols.map(c=>`<td class="${c.n?'n mono':''}">${c.f?c.f(x):esc(x[c.k]??'—')}</td>`).join('')}${extra?`<td style="white-space:nowrap">${extra(x)}</td>`:''}</tr>`).join('')}</tbody></table></div>`;}
+const admD=v=>v?fmtData(parseIso(String(v).slice(0,10))):'—';
+const admP=(r,a)=>{if(r==null||+r===0)return '<span class="obs">—</span>';const p=(+a||0)/(+r)*100;const c=p>105?'#6B21A8':p>=95?'#2E7D4F':p>=50?'#B7791F':'#C8102E';return `${ppN(+a||0)}<span class="obs"> / ${ppN(+r)}</span><div class="adm-bar"><i style="width:${Math.min(100,p)}%;background:${c}"></i></div>`;};
+function admTab(){const el=document.getElementById('adm-tab');if(!el||!ADM.d)return;const D=ADM.d;const t=ADM.tab;
+  const optCons=sel=>`<option value="">— sem consultor —</option>`+D.lista.map(c=>`<option value="${c.id}"${c.id===sel?' selected':''}>${esc(c.nome)}</option>`).join('');
+  if(t==='consultores')el.innerHTML=admTabela([{k:'consultor',l:'Consultor',f:x=>`<b>${esc(x.consultor)}</b>`},{k:'usuarios',l:'Usuários',n:1},{k:'fazendas',l:'Fazendas',n:1},{k:'produtores',l:'Produtores',n:1},{k:'talhoes',l:'Talhões',n:1},{k:'area_ha',l:'Área (ha)',n:1,f:x=>ppN(+x.area_ha)},{k:'analises',l:'Análises',n:1},
+      {k:'ad',l:'Adesão',n:1,f:x=>{const L=D.exe.filter(e=>e.consultor===x.consultor);const f=L.reduce((s,e)=>s+(+e.feitas||0),0),n=L.reduce((s,e)=>s+(+e.nao_feitas||0),0);return f+n?Math.round(f/(f+n)*100)+'%':'—';}}],admFiltra(D.cons));
+  if(t==='fazendas'){const idc=Object.fromEntries(D.lista.map(c=>[c.nome,c.id]));
+    el.innerHTML=admTabela([{k:'codigo_nescafe',l:'Código NESCAFÉ',f:x=>`<span class="mono">${esc(x.codigo_nescafe||'—')}</span>`},{k:'fazenda',l:'Fazenda',f:x=>`<b>${esc(x.fazenda)}</b>`},{k:'produtor',l:'Produtor'},{k:'municipio',l:'Município'},
+      {k:'consultor',l:'Consultor (vínculo)',f:x=>`<select class="adm-sel" onchange="admVincular('${x.fazenda_id}',this.value)">${optCons(idc[x.consultor]||'')}</select>`},
+      {k:'talhoes',l:'Talhões',n:1},{k:'area_ha',l:'Área (ha)',n:1,f:x=>ppN(+x.area_ha)},{k:'analises',l:'Análises',n:1},{k:'ultima_analise',l:'Última análise',f:x=>admD(x.ultima_analise)}],admFiltra(D.faz));}
+  if(t==='analises')el.innerHTML=admTabela([{k:'data_coleta',l:'Data',f:x=>admD(x.data_coleta)},{k:'fazenda',l:'Fazenda',f:x=>`<b>${esc(x.fazenda)}</b><div class="obs">${esc(x.codigo_nescafe||'')} · ${esc(x.produtor||'')}</div>`},{k:'consultor',l:'Consultor'},
+      {k:'aplicacoes',l:'Aplic.',n:1},{k:'feitas',l:'Feitas',n:1},{k:'nao_feitas',l:'Não feitas',n:1},{k:'pendentes',l:'Pend.',n:1},{k:'atrasadas',l:'Atras.',n:1,f:x=>+x.atrasadas?`<b style="color:#B7791F">${x.atrasadas}</b>`:'0'},
+      {k:'adesao_pct',l:'Adesão',n:1,f:x=>x.adesao_pct!=null?Math.round(x.adesao_pct)+'%':'—'},{k:'calibracoes',l:'Calib.',n:1}],admFiltra(D.exe),
+      x=>`<button class="btn btn-sec btn-sm" title="PDF da recomendação" onclick="admPdfAnalise('${x.analise_id}')">📄 Rec.</button> <button class="btn btn-sec btn-sm" title="PDF da execução" onclick="exportarExecPDF(['${x.analise_id}'])">📄 Exec.</button> <button class="btn btn-sec btn-sm" title="XLSX da execução" onclick="exportarExecXLSX(['${x.analise_id}'])">📊</button>`);
+  if(t==='nutrientes'){const NN=[['n','N'],['p2o5','P₂O₅'],['k2o','K₂O'],['ca','Ca'],['mg','Mg'],['s','S'],['b','B'],['zn','Zn']];
+    const L=admFiltra(D.nut);const tot={};NN.forEach(([k])=>{tot[k]={r:0,a:0};});L.forEach(x=>NN.forEach(([k])=>{tot[k].r+=+x[k+'_rec']||0;tot[k].a+=+x[k+'_apl']||0;}));
+    el.innerHTML=`<div class="obs" style="margin:2px 0 8px">Aplicado / recomendado em <b>kg/ha</b> por talhão (nutriente = dose × garantia do insumo). Barra: verde ≥ 95% · âmbar ≥ 50% · vermelho &lt; 50%.</div>
+      <div class="adm-nt">${NN.map(([k,l])=>{const p=tot[k].r?tot[k].a/tot[k].r*100:null;return `<div><b>${l}</b><span>${p==null?'—':Math.round(p)+'%'}</span><small>aplicado do recomendado</small></div>`;}).join('')}</div>`
+      +admTabela([{k:'fazenda',l:'Fazenda',f:x=>`<b>${esc(x.fazenda)}</b><div class="obs">${esc(x.codigo_nescafe||'')}</div>`},{k:'talhao',l:'Talhão'},{k:'consultor',l:'Consultor'},{k:'data_coleta',l:'Análise',f:x=>admD(x.data_coleta)}]
+        .concat(NN.map(([k,l])=>({k:k+'_apl',l,n:1,f:x=>admP(x[k+'_rec'],x[k+'_apl'])}))),L);}
+  if(t==='usuarios'){const tag={pendente:'<span class="cv-tag cv-exc">aguardando</span>',aprovado:'<span class="cv-tag cv-ok">aprovado</span>',bloqueado:'<span class="cv-tag cv-def">bloqueado</span>'};const me=nvPerfil().id;
+    el.innerHTML=`<div class="adm-form"><b>➕ Novo usuário</b><input id="nu-usuario" placeholder="usuário (ex.: wilson.neto)"><input id="nu-nome" placeholder="nome completo"><input id="nu-senha" placeholder="senha inicial (mín. 6)">
+      <select id="nu-cons">${optCons('')}</select><select id="nu-papel"><option value="consultor">Consultor</option><option value="admin">Admin</option></select><button class="btn btn-primary btn-sm" onclick="admNovoUsuario()">Criar e aprovar</button></div>`
+      +admTabela([{k:'usuario',l:'Usuário',f:x=>`<b>${esc(x.usuario)}</b>`},{k:'nome',l:'Nome'},{k:'situacao',l:'Situação',f:x=>tag[x.situacao]||x.situacao},
+        {k:'papel',l:'Papel',f:x=>`<select class="adm-sel" ${x.id===me?'disabled':''} onchange="admUser('${x.id}',{papel:this.value})"><option value="consultor"${x.papel==='consultor'?' selected':''}>Consultor</option><option value="admin"${x.papel==='admin'?' selected':''}>Admin</option></select>`},
+        {k:'consultor',l:'Consultor vinculado',f:x=>x.papel==='admin'?'<span class="obs">vê tudo</span>':`<select class="adm-sel" onchange="admUser('${x.id}',{consultor_id:this.value||null})">${optCons(x.consultor_id||'')}</select>`},
+        {k:'criado_em',l:'Cadastro',f:x=>admD(x.criado_em)}],admFiltra(D.usu),
+        x=>x.id===me?'<span class="obs">você</span>':x.situacao==='aprovado'?`<button class="btn btn-sec btn-sm" onclick="admUser('${x.id}',{situacao:'bloqueado'})">Bloquear</button>`:`<button class="btn btn-primary btn-sm" onclick="admUser('${x.id}',{situacao:'aprovado',aprovado_em:new Date().toISOString()})">✓ Aprovar</button>`);}
+  if(t==='cadastros')el.innerHTML=`<div class="adm-cads">
+    <div class="adm-card"><h4>📥 Importar planilha XLSX</h4><p class="obs">Colunas, nesta ordem: <b>CODIGO NESCAFE · PRODUTOR · FAZENDA · CONSULTOR</b>. Cria consultores e produtores que não existirem; código já existente é <b>atualizado</b> (inclusive o consultor vinculado).</p>
+      <input type="file" id="adm-xlsx" accept=".xlsx,.csv" onchange="admImportar(this)"><div class="actions"><button class="btn btn-sec btn-sm" onclick="admModelo()">⬇ Baixar modelo</button></div><div id="adm-imp"></div></div>
+    <div class="adm-card"><h4>🏡 Cadastrar fazenda</h4><div class="adm-form col"><input id="cf-cod" placeholder="Código NESCAFÉ"><input id="cf-prod" placeholder="Produtor" list="dl-prod"><input id="cf-faz" placeholder="Fazenda">
+      <input id="cf-cons" placeholder="Consultor" list="dl-cons"><button class="btn btn-primary btn-sm" onclick="admNovaFazenda()">Salvar fazenda</button></div>
+      <datalist id="dl-cons">${D.lista.map(c=>`<option value="${esc(c.nome)}">`).join('')}</datalist><datalist id="dl-prod">${[...new Set(D.faz.map(f=>f.produtor).filter(Boolean))].map(p=>`<option value="${esc(p)}">`).join('')}</datalist></div>
+    <div class="adm-card"><h4>👤 Cadastrar consultor</h4><div class="adm-form col"><input id="cc-nome" placeholder="Nome do consultor"><button class="btn btn-primary btn-sm" onclick="admNovoConsultor()">Salvar consultor</button></div>
+      <p class="obs" style="margin-top:8px">O <b>consultor</b> é o vínculo: cada usuário vinculado a ele vê só as fazendas dele. Vincule em <b>Usuários</b>.</p></div></div>`;}
+async function admUser(id,patch){try{await SB.rest('PATCH',`usuarios?id=eq.${id}`,patch);toast('Usuário atualizado.');await admRender(true);}catch(e){toast(e.message,'error');}}
+async function admVincular(fid,cid){try{await SB.rest('PATCH',`fazendas?id=eq.${encodeURIComponent(fid)}`,{consultor_id:cid||null});toast('Vínculo da fazenda atualizado.');await admRender(true);}catch(e){toast(e.message,'error');}}
+async function admNovoConsultor(){const n=val('cc-nome').trim();if(!n){toast('Informe o nome.','error');return;}
+  try{await SB.rest('POST','consultores?on_conflict=nome',{nome:n},{Prefer:'return=minimal,resolution=ignore-duplicates'});toast('Consultor cadastrado.');await admRender(true);}catch(e){toast(e.message,'error');}}
+async function admRpcImport(linhas,arquivo){return SB.rest('POST','rpc/importar_planilha',{linhas,arquivo},{Prefer:''});}
+async function admNovaFazenda(){const l={codigo:val('cf-cod').trim(),produtor:val('cf-prod').trim(),fazenda:val('cf-faz').trim(),consultor:val('cf-cons').trim()};
+  if(!l.codigo||!l.fazenda){toast('Código NESCAFÉ e Fazenda são obrigatórios.','error');return;}
+  try{const r=await admRpcImport([l],'cadastro manual');toast(r.criadas?'Fazenda cadastrada.':'Fazenda atualizada (código já existia).');await admRender(true);}catch(e){toast(e.message,'error');}}
+async function admNovoUsuario(){const u=val('nu-usuario').trim().toLowerCase(),nome=val('nu-nome').trim(),senha=val('nu-senha'),cid=val('nu-cons'),papel=val('nu-papel');
+  if(!/^[a-z0-9._-]{3,}$/.test(u)&&!u.includes('@')){toast('Usuário: mínimo 3 caracteres, sem espaços/acentos.','error');return;}
+  if(senha.length<6){toast('Senha com no mínimo 6 caracteres.','error');return;}
+  try{const r=await fetch(`${SB_URL}/auth/v1/signup`,{method:'POST',headers:{apikey:SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:sbEmail(u),password:senha,data:{nome:nome||u,usuario:u.split('@')[0]}})});
+    const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(/already registered/i.test(j.msg||'')?'Esse usuário já existe.':(j.msg||j.message||'Erro '+r.status));
+    const id=(j.user&&j.user.id)||j.id;if(!id)throw new Error('Cadastro criado, mas sem confirmação automática. Desligue "Confirm email" no Supabase.');
+    await SB.rest('PATCH',`usuarios?id=eq.${id}`,{situacao:'aprovado',aprovado_em:new Date().toISOString(),papel,consultor_id:papel==='admin'?null:(cid||null),nome:nome||u});
+    toast(`Usuário "${u}" criado e aprovado. Login: ${u} · senha informada.`);await admRender(true);}
+  catch(e){toast(e.message,'error');}}
+async function admPdfAnalise(aid){if(!DB.get('analises').some(a=>a.id===aid)){try{await nvBaixar();}catch(e){}}pdfHist(aid);}
+/* --- leitor XLSX (sem biblioteca) --- */
+async function xlsxLer(file){const u8=new Uint8Array(await file.arrayBuffer());
+  if(/\.csv$/i.test(file.name)){const tx=new TextDecoder().decode(u8);const sep=tx.split('\n')[0].includes(';')?';':',';return tx.split(/\r?\n/).filter(l=>l.trim()).map(l=>l.split(sep).map(c=>c.replace(/^"|"$/g,'').trim()));}
+  const dv=new DataView(u8.buffer);let e=u8.length-22;while(e>=0&&dv.getUint32(e,true)!==0x06054b50)e--;if(e<0)throw new Error('Arquivo XLSX inválido.');
+  const n=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true);const ent={};
+  for(let i=0;i<n;i++){const m=dv.getUint16(p+10,true),cs=dv.getUint32(p+20,true),nl=dv.getUint16(p+28,true),xl=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),lo=dv.getUint32(p+42,true);
+    const nm=new TextDecoder().decode(u8.subarray(p+46,p+46+nl));ent[nm]={m,cs,lo};p+=46+nl+xl+cl;}
+  const ler=async nm=>{const x=ent[nm];if(!x)return null;const ln=dv.getUint16(x.lo+26,true),lx=dv.getUint16(x.lo+28,true);const d=u8.subarray(x.lo+30+ln+lx,x.lo+30+ln+lx+x.cs);
+    if(x.m===0)return new TextDecoder().decode(d);const s=new Blob([d]).stream().pipeThrough(new DecompressionStream('deflate-raw'));return new TextDecoder().decode(await new Response(s).arrayBuffer());};
+  const X=t=>new DOMParser().parseFromString(t,'application/xml');
+  const ss=[];const sst=await ler('xl/sharedStrings.xml');if(sst)[...X(sst).getElementsByTagName('si')].forEach(si=>ss.push([...si.getElementsByTagName('t')].map(t=>t.textContent).join('')));
+  let alvo='xl/worksheets/sheet1.xml';try{const wb=X(await ler('xl/workbook.xml'));const sh=wb.getElementsByTagName('sheet')[0];const rid=sh.getAttribute('r:id')||sh.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id');
+    const rel=[...X(await ler('xl/_rels/workbook.xml.rels')).getElementsByTagName('Relationship')].find(r=>r.getAttribute('Id')===rid);if(rel){const tg=rel.getAttribute('Target').replace(/^\/?(xl\/)?/,'');alvo='xl/'+tg;}}catch(x){}
+  const sx=X(await ler(alvo));const col=r=>{let c=0;for(const ch of r.replace(/\d/g,''))c=c*26+ch.charCodeAt(0)-64;return c-1;};const rows=[];
+  [...sx.getElementsByTagName('row')].forEach(rw=>{const L=[];[...rw.getElementsByTagName('c')].forEach(c=>{const t=c.getAttribute('t');const v=c.getElementsByTagName('v')[0];
+    let val=t==='s'?ss[+(v&&v.textContent)]:t==='inlineStr'?[...c.getElementsByTagName('t')].map(x=>x.textContent).join(''):(v?v.textContent:'');L[col(c.getAttribute('r')||'A1')]=String(val??'').trim();});rows.push(L);});
+  return rows;}
+async function admImportar(inp){const f=inp.files[0];if(!f)return;const box=document.getElementById('adm-imp');box.innerHTML='<div class="obs">Lendo…</div>';
+  try{let rows=await xlsxLer(f);rows=rows.filter(r=>r&&r.some(c=>c));if(rows.length&&/codigo|código/i.test(rows[0][0]||''))rows.shift();
+    const linhas=rows.map(r=>({codigo:r[0]||'',produtor:r[1]||'',fazenda:r[2]||'',consultor:r[3]||''}));
+    if(!linhas.length)throw new Error('Planilha vazia.');
+    const prev=linhas.slice(0,5).map(l=>`<tr><td class="mono">${esc(l.codigo)}</td><td>${esc(l.produtor)}</td><td>${esc(l.fazenda)}</td><td>${esc(l.consultor)}</td></tr>`).join('');
+    box.innerHTML=`<div class="obs" style="margin:8px 0 4px"><b>${linhas.length}</b> linha(s) encontradas · prévia:</div><div class="cv-wrap"><table class="cv-tab"><thead><tr><th>Código</th><th>Produtor</th><th>Fazenda</th><th>Consultor</th></tr></thead><tbody>${prev}</tbody></table></div>
+      <div class="actions"><button class="btn btn-primary btn-sm" id="adm-imp-go">✅ Importar ${linhas.length} linha(s)</button></div>`;
+    document.getElementById('adm-imp-go').onclick=async()=>{box.innerHTML='<div class="obs">Importando…</div>';
+      try{const r=await admRpcImport(linhas,f.name);const er=r.erros||[];
+        box.innerHTML=`<div class="inst" style="background:#F3FAF7;border-color:#BCF0DA;color:#1f5e3a">✅ ${r.criadas} fazenda(s) criada(s) · ${r.atualizadas} atualizada(s)${er.length?` · <b style="color:#C8102E">${er.length} com erro</b>: ${er.slice(0,5).map(x=>'linha '+x.linha+' ('+esc(x.erro)+')').join('; ')}`:''}</div>`;
+        ADM.d=null;await admCarregar();toast('Importação concluída.');}catch(e){box.innerHTML=`<div class="inst">${esc(e.message)}</div>`;}};}
+  catch(e){box.innerHTML=`<div class="inst">${esc(e.message)}</div>`;}
+  inp.value='';}
+function admModelo(){baixarBytes(buildXLSX([['CODIGO NESCAFE','PRODUTOR','FAZENDA','CONSULTOR'],['NP-00123','João da Silva','Fazenda Boa Vista','Wilson Neto']],'Cadastro'),'MODELO_IMPORTACAO_FAZENDAS.xlsx');}
+/* --- relatórios do admin --- */
+function admXLSX(){const D=ADM.d;if(!D){toast('Carregue o painel primeiro.','error');return;}
+  const tab=(L,cols)=>[cols.map(c=>c[1])].concat(L.map(x=>cols.map(c=>{const v=x[c[0]];return v==null?'':typeof v==='boolean'?(v?'Sim':'Não'):v;})));
+  const nk=['n','p2o5','k2o','ca','mg','s','b','zn','cu','mn','fe'];
+  baixarBytes(buildXLSX(tab(D.cons,[['consultor','Consultor'],['usuarios','Usuários'],['fazendas','Fazendas'],['produtores','Produtores'],['talhoes','Talhões'],['area_ha','Área (ha)'],['analises','Análises']]),'Consultores',[
+    {n:'Fazendas',rows:tab(D.faz,[['codigo_nescafe','Código NESCAFÉ'],['fazenda','Fazenda'],['produtor','Produtor'],['consultor','Consultor'],['municipio','Município'],['talhoes','Talhões'],['area_ha','Área (ha)'],['analises','Análises'],['ultima_analise','Última análise']])},
+    {n:'Analises',rows:tab(D.exe,[['data_coleta','Data'],['codigo_nescafe','Código NESCAFÉ'],['fazenda','Fazenda'],['produtor','Produtor'],['consultor','Consultor'],['aplicacoes','Aplicações'],['feitas','Feitas'],['nao_feitas','Não feitas'],['pendentes','Pendentes'],['atrasadas','Atrasadas'],['adesao_pct','Adesão (%)'],['calibracoes','Calibrações foliares']])},
+    {n:'Aplicacoes',rows:tab(D.apl,[['codigo_nescafe','Código NESCAFÉ'],['fazenda','Fazenda'],['consultor','Consultor'],['talhao','Talhão'],['area_ha','Área (ha)'],['etapa','Etapa'],['data_prevista','Data prevista'],['insumo','Insumo'],['via','Via'],['unidade','Unidade'],['dose_recomendada','Recomendado'],['situacao','Situação'],['dose_aplicada','Aplicado'],['data_aplicada','Data aplicação'],['atrasada','Atrasada'],['observacao','Obs.']])},
+    {n:'Nutrientes',rows:tab(D.nut,[['codigo_nescafe','Código NESCAFÉ'],['fazenda','Fazenda'],['talhao','Talhão'],['consultor','Consultor'],['data_coleta','Análise']].concat(nk.flatMap(k=>[[k+'_rec',k.toUpperCase()+' rec (kg/ha)'],[k+'_apl',k.toUpperCase()+' apl (kg/ha)']])))},
+    {n:'Usuarios',rows:tab(D.usu,[['usuario','Usuário'],['nome','Nome'],['papel','Papel'],['situacao','Situação'],['consultor','Consultor'],['criado_em','Cadastro']])}]),
+    `NESCAFE_PLAN_PAINEL_${new Date().toISOString().slice(0,10)}.xlsx`);toast('XLSX do painel exportado!');}
+function admPDF(){const D=ADM.d;if(!D){toast('Carregue o painel primeiro.','error');return;}
+  const T=(cols,L)=>`<table class="p-t"><thead><tr>${cols.map(c=>`<th>${c[1]}</th>`).join('')}</tr></thead><tbody>${L.map(x=>`<tr>${cols.map(c=>`<td>${esc(c[2]?c[2](x):(x[c[0]]??'—'))}</td>`).join('')}</tr>`).join('')||'<tr><td>—</td></tr>'}</tbody></table>`;
+  const sum=(L,k)=>L.reduce((s,x)=>s+(+x[k]||0),0);const f=sum(D.exe,'feitas'),n=sum(D.exe,'nao_feitas');
+  document.getElementById('print-area').innerHTML=`<div class="p-head"><div class="p-brand">${LOGO_HTML}<small>Painel do Administrador — visão consolidada</small></div><div class="p-meta">Gerado em ${new Date().toLocaleString('pt-BR')} · por ${esc(nvPerfil().nome||'')}</div></div>
+    <div class="p-sub">${D.lista.length} consultores · ${D.faz.length} fazendas · ${sum(D.faz,'talhoes')} talhões (${ppN(sum(D.faz,'area_ha'))} ha) · ${D.exe.length} análises · adesão ${f+n?Math.round(f/(f+n)*100)+'%':'—'} · ${sum(D.exe,'pendentes')} aplicações pendentes (${sum(D.exe,'atrasadas')} atrasadas)</div>
+    <div class="p-sub">POR CONSULTOR</div>${T([['consultor','Consultor'],['usuarios','Usuários'],['fazendas','Fazendas'],['produtores','Produtores'],['talhoes','Talhões'],['area_ha','Área (ha)',x=>ppN(+x.area_ha)],['analises','Análises']],D.cons)}
+    <div class="p-sub">ANÁLISES E EXECUÇÃO</div>${T([['data_coleta','Data',x=>admD(x.data_coleta)],['codigo_nescafe','Código'],['fazenda','Fazenda'],['consultor','Consultor'],['aplicacoes','Aplic.'],['feitas','Feitas'],['nao_feitas','Não feitas'],['pendentes','Pend.'],['atrasadas','Atras.'],['adesao_pct','Adesão %',x=>x.adesao_pct!=null?Math.round(x.adesao_pct)+'%':'—']],D.exe)}
+    <div class="p-sub">NUTRIENTES APLICADOS / RECOMENDADOS (kg/ha)</div>${T([['fazenda','Fazenda'],['talhao','Talhão']].concat([['n','N'],['p2o5','P₂O₅'],['k2o','K₂O'],['ca','Ca'],['mg','Mg'],['s','S']].map(([k,l])=>[k,l,x=>x[k+'_rec']?`${ppN(+x[k+'_apl']||0)} / ${ppN(+x[k+'_rec'])}`:'—'])),D.nut)}
+    <div class="p-sub">FAZENDAS</div>${T([['codigo_nescafe','Código'],['fazenda','Fazenda'],['produtor','Produtor'],['consultor','Consultor'],['talhoes','Talhões'],['analises','Análises'],['ultima_analise','Última análise',x=>admD(x.ultima_analise)]],D.faz)}`;
+  const t=document.title;document.title='NESCAFE_PLAN_PAINEL_'+new Date().toISOString().slice(0,10);setTimeout(()=>{window.print();document.title=t;},150);toast('Na janela de impressão, escolha "Salvar como PDF".','info');}
+
 /* ---------- início ---------- */
 document.addEventListener('DOMContentLoaded',()=>{lgModo('entrar');if(SB.sess()){aplicarSessao();if(navigator.onLine)posLogin(false);}else aplicarSessao();});
+
 </script>
 <!-- pdf.js 5.4.296 (Mozilla, Apache-2.0) embutido para leitura offline de laudos -->
 <script type="module">/**
