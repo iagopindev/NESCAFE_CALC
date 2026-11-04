@@ -598,6 +598,25 @@ body.need-login>*:not(.login-ov){visibility:hidden}
 .adm-card h4{font:700 .95rem var(--f-tit);color:var(--cafe);margin-bottom:6px}.adm-card input[type=file]{margin:8px 0}
 .adm-k small b{font:700 .72rem var(--f-txt)!important}
 .cv-save{position:sticky;bottom:8px;z-index:4;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#fff;border:1px solid #BCF0DA;border-left:4px solid #2E7D4F;border-radius:12px;padding:10px 14px;box-shadow:0 10px 24px -10px rgba(42,26,18,.25);font-size:.84rem}
+.ft-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:14px}
+.ft-k{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--borda);border-top:4px solid var(--c);border-radius:14px;padding:12px 14px;box-shadow:var(--sombra)}
+.ft-k>span{font-size:1.3rem}.ft-k b{display:block;font:700 1.35rem var(--f-num);color:var(--c)}.ft-k small{font-size:.72rem;color:var(--cinza);text-transform:uppercase;letter-spacing:.04em;font-weight:700}
+.ft-k-c{flex-direction:column;align-items:flex-start;justify-content:center;border-top-color:var(--dourado)}.ft-k-c small b{display:inline;font-size:.95rem;color:var(--cafe)}
+.ft-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.ft-bar input{flex:1 1 280px;padding:9px 12px;border:1px solid var(--borda);border-radius:10px;font-size:.88rem;background:#fff}
+.ft-seg{display:flex;background:#EFE6DC;border-radius:10px;padding:3px}.ft-seg .seg span{font:700 .7rem var(--f-num);background:#fff;border-radius:99px;padding:1px 6px;margin-left:4px}
+.ft-c{background:#fff;border:1px solid var(--borda);border-radius:14px;margin-bottom:8px;overflow:hidden;box-shadow:var(--sombra)}
+.ft-c.open{border-color:var(--dourado)}.ft-vazia{border-left:4px solid #E1001A}
+.ft-ch{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;flex-wrap:wrap}.ft-ch:hover{background:var(--creme)}
+.ft-car{color:var(--vermelho);font-weight:700;width:12px}.ft-cn{flex:1 1 260px;min-width:0}.ft-cn b{font:700 .98rem var(--f-tit);color:var(--cafe)}
+.ft-cn small{display:block;font-size:.76rem;color:var(--cinza);margin-top:2px}
+.ft-cs{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ft-n{font-size:.78rem;color:var(--cinza)}.ft-n b{font:700 .9rem var(--f-num);color:var(--cafe)}
+.ft-tag{font:700 .7rem var(--f-txt);color:#E1001A;background:#FFF1F2;border:1px solid #FFB8BF;border-radius:99px;padding:2px 9px;text-transform:uppercase}
+.ft-cb{border-top:1px solid var(--borda);padding:10px 16px 12px;background:#FFFCF8}
+.ft-t{width:100%;border-collapse:collapse;font-size:.84rem}.ft-t th{background:var(--neutro);padding:7px 9px;font-size:.7rem;text-transform:uppercase;text-align:left;color:var(--cafe)}
+.ft-t td{padding:7px 9px;border-top:1px solid #F1E9E0}.ft-t .n{text-align:right}
+.ft-emp{font-size:.86rem;color:var(--cinza);padding:6px 0}.ft-emp a{color:var(--vermelho);font-weight:700}
+.ft-form{background:#fff;border:1px solid var(--borda);border-radius:14px;margin-top:16px;box-shadow:var(--sombra)}.ft-form>summary{cursor:pointer;padding:12px 16px;font:700 .95rem var(--f-tit);color:var(--cafe)}
 </style>
 </head>
 <body>
@@ -698,8 +717,14 @@ body.need-login>*:not(.login-ov){visibility:hidden}
 
 <!-- TALHÃO -->
 <div class="view" id="v-talhao">
-  <div class="sec-title">🌿 Cadastro de Talhão</div>
-  <div class="card-form">
+  <div class="sec-title">🏡 Fazendas &amp; Talhões</div>
+  <div id="ft-kpis" class="ft-kpis"></div>
+  <div class="ft-bar"><input id="ft-busca" placeholder="🔍 Buscar por fazenda, produtor, código ou município" oninput="renderFazTal()">
+    <div class="ft-seg" id="ft-filt"></div>
+    <button class="btn btn-sec btn-sm" onclick="ftTodos(true)">⊞ Expandir</button><button class="btn btn-sec btn-sm" onclick="ftTodos(false)">⊟ Recolher</button><button class="btn btn-dour btn-sm" onclick="ftXLSX()" title="Exporta a lista conforme busca e filtro atuais">📊 XLSX</button></div>
+  <div id="ft-list"></div>
+  <details class="ft-form" id="ft-form"><summary id="ft-form-t">🌿 Cadastrar talhão</summary>
+  <div class="card-form" style="margin:0;box-shadow:none;border:none">
     <div class="row">
       <div class="fg"><label>Fazenda *</label><select id="t-faz"></select></div>
       <div class="fg"><label>Identificação do Talhão *</label><input id="t-nome" placeholder="Ex: Talhão A1"></div>
@@ -719,10 +744,8 @@ body.need-login>*:not(.login-ov){visibility:hidden}
     </div>
     <input type="hidden" id="t-id">
   </div>
-  <div class="list">
-    <div class="list-h"><span>Talhões Cadastrados</span><span class="cnt" id="t-cnt">0 registros</span></div>
-    <div id="t-list"></div>
-  </div>
+  </details>
+  <div style="display:none"><span id="t-cnt"></span><div id="t-list"></div></div>
 </div>
 
 <!-- ANÁLISE -->
@@ -891,7 +914,63 @@ function salvarTalhao(){
 function limparTalhao(){['t-nome','t-area','t-ano','t-id'].forEach(i=>document.getElementById(i).value='');setv('t-idade','');setv('t-cult','');setv('t-est','producao');}
 function editarTalhao(id){const t=DB.get('talhoes').find(x=>x.id===id);if(!t)return;popFaz('t-faz');setv('t-faz',t.fazendaId);setv('t-nome',t.nome);setv('t-cult',t.cultura);setv('t-est',t.estagio);setv('t-area',t.area||'');setv('t-ano',t.anoPlantio||'');setv('t-id',id);calcIdade();window.scrollTo(0,0);}
 function excluirTalhao(id){confirmar('Excluir Talhão','Remover permanentemente?',()=>{DB.set('talhoes',DB.get('talhoes').filter(t=>t.id!==id));renderTalhoes();toast('Talhão removido.');});}
-function renderTalhoes(){const th=DB.get('talhoes'),fz=DB.get('fazendas');document.getElementById('t-cnt').textContent=th.length+' registro(s)';const el=document.getElementById('t-list');
+
+/* ===== Fazendas & Talhões — visão de todas as fazendas ===== */
+const FT={f:'todas',open:new Set()};
+function ftTodos(on){const fz=DB.get('fazendas');FT.open=on?new Set(fz.map(f=>f.id)):new Set();renderFazTal();}
+function ftTog(id){FT.open.has(id)?FT.open.delete(id):FT.open.add(id);renderFazTal();}
+function ftFiltro(f){FT.f=f;renderFazTal();}
+function ftNovoTalhao(fid){limparTalhao();popFaz('t-faz');setv('t-faz',fid);const d=document.getElementById('ft-form');d.open=true;
+  document.getElementById('ft-form-t').textContent='🌿 Cadastrar talhão';d.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>document.getElementById('t-nome').focus(),300);}
+function renderFazTal(){const fz=DB.get('fazendas'),th=DB.get('talhoes'),an=DB.get('analises');const el=document.getElementById('ft-list');if(!el)return;
+  const por=id=>th.filter(t=>t.fazendaId===id);const ult=id=>an.filter(a=>a.fazendaId===id).map(a=>a.data).filter(Boolean).sort().pop();
+  const nCom=fz.filter(f=>por(f.id).length).length;const areaT=th.reduce((s,t)=>s+(parseFloat(t.area)||0),0);
+  const cult=c=>th.filter(t=>t.cultura===c).length;
+  document.getElementById('ft-kpis').innerHTML=[['🏡',fz.length,'Fazendas','#2B1D17'],['🌿',th.length,'Talhões','#2E7D4F'],['📐',areaT.toLocaleString('pt-BR',{maximumFractionDigits:1})+' ha','Área em talhões','#C69C6D'],['⚠️',fz.length-nCom,'Fazendas sem talhão','#E1001A']]
+    .map(k=>`<div class="ft-k" style="--c:${k[3]}"><span>${k[0]}</span><div><b>${k[1]}</b><small>${k[2]}</small></div></div>`).join('')
+    +`<div class="ft-k ft-k-c"><small>Conilon <b>${cult('conilon')}</b></small><small>Arábica <b>${cult('arabica')}</b></small></div>`;
+  document.getElementById('ft-filt').innerHTML=[['todas','Todas',fz.length],['com','Com talhões',nCom],['sem','Sem talhões',fz.length-nCom]].map(([k,l,n])=>`<button class="seg${FT.f===k?' on':''}" onclick="ftFiltro('${k}')">${l} <span>${n}</span></button>`).join('');
+  const q=(val('ft-busca')||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const L=fz.filter(f=>{const n=por(f.id).length;if(FT.f==='com'&&!n)return false;if(FT.f==='sem'&&n)return false;
+      if(!q)return true;return [f.nome,f.prod,f.codigo,f.mun,f.consultorNome].join(' ').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(q);})
+    .sort((a,b)=>(a.nome||'').localeCompare(b.nome||'','pt-BR'));
+  if(!fz.length){el.innerHTML='<div class="empty"><div class="ic">🏡</div><p>Nenhuma fazenda vinculada a você ainda.</p></div>';return;}
+  if(!L.length){el.innerHTML='<div class="empty"><p>Nenhuma fazenda encontrada.</p></div>';return;}
+  el.innerHTML=L.map(f=>{const ts=por(f.id);const a=ts.reduce((s,t)=>s+(parseFloat(t.area)||0),0);const ab=FT.open.has(f.id);const u=ult(f.id);
+    const cs=[...new Set(ts.map(t=>t.cultura))];
+    return `<div class="ft-c${ts.length?'':' ft-vazia'}${ab?' open':''}">
+      <div class="ft-ch" onclick="ftTog('${f.id}')"><span class="ft-car">${ab?'▾':'▸'}</span>
+        <div class="ft-cn"><b>${esc(f.nome)}</b><small>${f.codigo?`<span class="mono">${esc(f.codigo)}</span> · `:''}👤 ${esc(f.prod||'—')}${f.mun?' · 📍 '+esc(f.mun):''}${f.consultorNome?' · ATS '+esc(f.consultorNome):''}</small></div>
+        <div class="ft-cs">${cs.map(c=>`<span class="badge b-${c}">${nomeCultura(c)}</span>`).join('')}
+          ${ts.length?`<span class="ft-n"><b>${ts.length}</b> talhão(ões)</span><span class="ft-n"><b>${a.toLocaleString('pt-BR',{maximumFractionDigits:1})}</b> ha</span>`:'<span class="ft-tag">Sem talhões</span>'}
+          <span class="ft-n obs">${u?'Últ. análise '+fmtData(parseIso(u)):'Sem análise'}</span></div>
+        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();ftNovoTalhao('${f.id}')">＋ Talhão</button></div>
+      ${ab?`<div class="ft-cb">${ts.length?`<table class="ft-t"><thead><tr><th>Talhão</th><th>Cultura</th><th>Estágio</th><th class="n">Área (ha)</th><th class="n">Plantio</th><th class="n">Idade</th><th></th></tr></thead><tbody>
+        ${ts.map(t=>`<tr><td><b>${esc(t.nome)}</b></td><td><span class="badge b-${t.cultura}">${nomeCultura(t.cultura)}</span></td><td><span class="badge b-${t.estagio}">${estLabel(t.estagio)}</span></td><td class="n mono">${t.area||'—'}</td><td class="n mono">${t.anoPlantio||'—'}</td><td class="n">${t.idade!=null&&t.idade!==''?t.idade+' anos':'—'}</td>
+          <td class="n"><button class="btn btn-sec btn-sm" onclick="ftEditar('${t.id}')">✏️</button> <button class="btn btn-danger btn-sm" onclick="excluirTalhao('${t.id}')">🗑️</button></td></tr>`).join('')}</tbody></table>`
+        :`<div class="ft-emp">Esta fazenda ainda não tem talhões. <a href="#" onclick="ftNovoTalhao('${f.id}');return false">Cadastrar o primeiro →</a></div>`}</div>`:''}</div>`;}).join('');}
+
+function ftLista(){const fz=DB.get('fazendas'),th=DB.get('talhoes');const por=id=>th.filter(t=>t.fazendaId===id);
+  const q=(val('ft-busca')||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  return fz.filter(f=>{const n=por(f.id).length;if(FT.f==='com'&&!n)return false;if(FT.f==='sem'&&n)return false;
+    if(!q)return true;return [f.nome,f.prod,f.codigo,f.mun,f.consultorNome].join(' ').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(q);})
+    .sort((a,b)=>(a.nome||'').localeCompare(b.nome||'','pt-BR'));}
+function ftXLSX(){const L=ftLista();if(!L.length){toast('Nenhuma fazenda para exportar.','error');return;}
+  const th=DB.get('talhoes'),an=DB.get('analises');const num=v=>{const n=parseFloat(String(v??'').replace(',','.'));return isNaN(n)?'':n;};
+  const ult=id=>an.filter(a=>a.fazendaId===id).map(a=>a.data).filter(Boolean).sort().pop()||'';
+  const nAn=id=>an.filter(a=>a.fazendaId===id).length;
+  const r1=[['Código NESCAFÉ','Fazenda','Produtor','Município','Consultor','Talhões','Área em talhões (ha)','Talhões Conilon','Talhões Arábica','Análises','Última análise','Situação']];
+  const r2=[['Código NESCAFÉ','Fazenda','Produtor','Consultor','Talhão','Cultura','Estágio','Área (ha)','Ano de plantio','Idade (anos)']];
+  L.forEach(f=>{const ts=th.filter(t=>t.fazendaId===f.id).sort((a,b)=>(a.nome||'').localeCompare(b.nome||'','pt-BR',{numeric:true}));
+    const area=ts.reduce((s,t)=>s+(num(t.area)||0),0);
+    r1.push([f.codigo||'',f.nome||'',f.prod||'',f.mun||'',f.consultorNome||'',ts.length,+area.toFixed(2),ts.filter(t=>t.cultura==='conilon').length,ts.filter(t=>t.cultura==='arabica').length,nAn(f.id),ult(f.id),ts.length?'Com talhões':'Sem talhões']);
+    ts.forEach(t=>r2.push([f.codigo||'',f.nome||'',f.prod||'',f.consultorNome||'',t.nome||'',nomeCultura(t.cultura),estLabel(t.estagio),num(t.area),num(t.anoPlantio),num(t.idade)]));});
+  const hoje=new Date().toISOString().slice(0,10);
+  baixarBytes(buildXLSX(r1,'Fazendas',[{n:'Talhoes',rows:r2}]),`FAZENDAS_TALHOES_${sanitize(DB.gets('consultor')||'ATS')}_${hoje}.xlsx`);
+  toast(`XLSX exportado: ${L.length} fazenda(s), ${r2.length-1} talhão(ões).`);}
+function ftEditar(id){editarTalhao(id);const d=document.getElementById('ft-form');d.open=true;document.getElementById('ft-form-t').textContent='✏️ Editar talhão';d.scrollIntoView({behavior:'smooth',block:'start'});}
+
+function renderTalhoes(){if(document.getElementById('ft-list'))renderFazTal();const th=DB.get('talhoes'),fz=DB.get('fazendas');document.getElementById('t-cnt').textContent=th.length+' registro(s)';const el=document.getElementById('t-list');
   if(!th.length){el.innerHTML='<div class="empty"><div class="ic">🌿</div><p>Nenhum talhão cadastrado.</p></div>';return;}
   el.innerHTML=th.map(t=>{const f=fz.find(x=>x.id===t.fazendaId);
     return `<div class="item"><div class="info"><h4>${esc(t.nome)} <span class="badge b-${t.cultura}">${nomeCultura(t.cultura)}</span> <span class="badge b-${t.estagio}">${estLabel(t.estagio)}</span></h4><p>${f?esc(f.nome):'—'} ${t.area?'· '+t.area+' ha':''} ${t.idade?'· '+t.idade+' anos':''}</p></div><div class="act"><button class="btn btn-sec btn-sm" onclick="editarTalhao('${t.id}')">✏️</button><button class="btn btn-danger btn-sm" onclick="excluirTalhao('${t.id}')">🗑️</button></div></div>`;}).join('');}
