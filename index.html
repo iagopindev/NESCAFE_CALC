@@ -371,6 +371,7 @@ body.need-login>*:not(.login-ov){visibility:hidden}
 .pp-cal-r{align-items:center;padding:.6mm 0;border-bottom:1px dashed #E8DFD3}
 .pp-cal-n{font-size:10px;font-weight:700;display:flex;align-items:center;gap:1.5mm;line-height:1.15}.pp-cal-n i{width:8px;height:8px;border-radius:50%;flex:none}
 .pp-cal-n small{display:block;font-size:7.6px;color:#8a7d72;font-weight:500}
+.pp-cel-ok{display:block;margin-top:.4mm;padding-top:.3mm;border-top:1px solid rgba(255,255,255,.45);font-weight:700}
 .pp-cel{border-radius:6px;color:#fff;text-align:center;padding:.8mm 0;line-height:1.1;overflow:hidden}
 .pp-cel b{display:block;font:800 9.5px var(--f-num)}.pp-cel small{display:block;font-size:7px;opacity:.92}
 .pp-anual{text-align:left;padding:.8mm 3mm}.pp-anual b{display:inline;font-size:10px;margin-right:2mm}.pp-anual small{display:inline;font-size:8px}
@@ -2956,7 +2957,10 @@ function ppCalendario(E){const n=E.k1-E.k0+1;const MES=['Jan','Fev','Mar','Abr',
   const mh=`<div style="${G};margin-bottom:1mm"><div></div>${Array.from({length:n},(_,i)=>{const k=E.k0+i;return `<div class="pp-mes">${MES[k%12]}${k%12===0||i===0?`<small>${String(Math.floor(k/12)).slice(2)}</small>`:''}</div>`;}).join('')}</div>`;
   const rows=E.rows.map(R=>{let cells='';
     if(R.anual)cells=`<div class="pp-cel pp-anual" style="grid-row:1;grid-column:2/${n+2};background:${R.cor}"><b>${ppKg(R.anual.tot)} kg no ano</b><small>${ppKg(R.anual.ha)} kg/ha · parcelar conforme orientação do técnico</small></div>`;
-    else cells=Object.keys(R.cells).map(k=>{const o=R.cells[k];const i=k-E.k0;return `<div class="pp-cel${o.done?' pp-done':''}" style="grid-row:1;grid-column:${i+2};background:${R.cor}"><b>${o.done?'✓ ':''}${ppKg(o.tot)}</b><small>${ppKg(o.ha)}/ha${o.n>1?' · '+o.n+'×':''}</small></div>`;}).join('');
+    else cells=Object.keys(R.cells).map(k=>{const o=R.cells[k];const i=Math.min(n-1,Math.max(0,k-E.k0));
+      if(o.dTot!=null&&o.dTot>0&&o.pTot>0) /* mês misto: mostra o que FALTA aplicar em destaque e o já aplicado à parte */
+        return `<div class="pp-cel" style="grid-row:1;grid-column:${i+2};background:${R.cor}"><b>${ppKg(o.pTot)}</b><small>${ppKg(o.pHa)}/ha a aplicar</small><small class="pp-cel-ok">✓ ${ppKg(o.dHa)}/ha feito</small></div>`;
+      return `<div class="pp-cel${o.done?' pp-done':''}" style="grid-row:1;grid-column:${i+2};background:${R.cor}"><b>${ppKg(o.tot)}</b><small>${o.done?'✓ ':''}${ppKg(o.ha)}/ha${o.n>1?' · '+o.n+'×':''}</small></div>`;}).join('');
     return `<div class="pp-cal-r" style="${G}"><div class="pp-cal-n" style="grid-row:1;grid-column:1"><i style="background:${R.cor}"></i><span>${esc(R.nome)}<small>${esc(R.sub||'')}</small></span></div>${cells}</div>`;}).join('');
   return `<div class="pp-card">${fz}${mh}${rows||'<div class="pp-obs">Nenhum insumo selecionado.</div>'}<div class="pp-obs" style="margin-top:1.5mm">Número grande = <b>kg para o talhão todo</b> · número pequeno = kg por hectare${E.done?' · <b>✓ claro = já aplicado</b>':''}.</div></div>`;}
 /* --- nutrientes aplicados (kg/ha) --- */
@@ -2990,12 +2994,12 @@ function ppMudancas(r,q0,q1){const c=r.cross;const cards=[];const CUR={exc2:'Fol
 function ppCalibEventos(a,ri){const r=a.resultados[ri];const area=parseFloat(r.talhao.area)||1;const its=execItens(a,ri);const ex=(a.execucao||{})[ri]||{};
   const rows={};let idx=0;const nut={};let temDone=false;
   its.forEach(it=>{const e=ex[it.k]||{};if(e.st==='nao')return;const done=e.st==='sim';const kgHa=done?(parseFloat(e.kg)||0):it.rec;if(kgHa<0.01)return;
-    const d=parseIso(done&&e.data?e.data:it.data)||parseIso(a.data)||new Date();
+    const d=parseIso(it.data)||parseIso(done&&e.data?e.data:'')||parseIso(a.data)||new Date(); // v38: posiciona pela data PLANEJADA (igual à Execução), não pela data em que foi marcado
     const fator=it.un==='t/ha'?1000:1;const nome=it.k==='cal'?'Calcário':it.k==='ges'?'Gesso':it.nome;const key=nome+'|'+(it.via||'solo');
     const cc=it.f?compOf(it.f):{};
     const R0=rows[key]||(rows[key]={nome,sub:it.via==='foliar'?'via folha (pulverização)':it.k==='cal'?'corretivo':it.k==='ges'?'agrícola':Object.keys(cc).filter(k=>cc[k]>0).slice(0,3).map(k=>`${ppN(cc[k])}% ${NUT_LABEL[k]}`).join(' · '),
       cor:it.k==='cal'?'#705A4F':it.k==='ges'?'#2471a3':it.via==='foliar'?'#13743E':PP_PAL[(idx++)%PP_PAL.length],cells:{}});
-    const k=ppMesKey(d);const o=R0.cells[k]||(R0.cells[k]={ha:0,tot:0,n:0,done:true});o.ha+=kgHa*fator;o.tot+=kgHa*fator*area;o.n++;o.done=o.done&&done;if(done)temDone=true;
+    const k=ppMesKey(d);const o=R0.cells[k]||(R0.cells[k]={ha:0,tot:0,n:0,done:true,dHa:0,dTot:0,pHa:0,pTot:0});o.ha+=kgHa*fator;o.tot+=kgHa*fator*area;o.n++;o.done=o.done&&done;if(done){temDone=true;o.dHa+=kgHa*fator;o.dTot+=kgHa*fator*area;}else{o.pHa+=kgHa*fator;o.pTot+=kgHa*fator*area;}
     Object.keys(cc).forEach(n=>{if(cc[n]>0)nut[n]=(nut[n]||0)+kgHa*cc[n]/100;});
     if(it.k==='ges')nut.S=(nut.S||0)+kgHa*0.15;});
   const list=Object.values(rows);const keys=list.flatMap(R0=>Object.keys(R0.cells).map(Number));
