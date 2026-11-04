@@ -1724,7 +1724,7 @@ function foliarHTML(r){
 function renderResultados(){
   const c=document.getElementById('res-container');
   if(!analiseAtual||!analiseAtual.resultados.length){c.innerHTML='<p>Nenhum dado.</p>';return;}
-  const _cb=(analiseAtual.calibracoes||[]).length?`<div class="inst" style="background:#F3FAF7;border-color:#BCF0DA;color:#2E7D4F">🍃 Esta recomendação foi calibrada por ${analiseAtual.calibracoes.length} coleta(s) de folha (última em ${fmtData(parseIso(analiseAtual.calibracoes.slice(-1)[0].data))}). As doses recalibradas das parcelas pendentes estão em <b>Histórico → Execução</b> e nas exportações.</div>`:'';
+  const _cb=(analiseAtual.calibracoes||[]).length?`<div class="inst" style="background:#F3FAF7;border-color:#BCF0DA;color:#2E7D4F">🍃 Esta recomendação foi calibrada por ${analiseAtual.calibracoes.length} coleta(s) de folha (última em ${fmtData(parseIso(analiseAtual.calibracoes.slice(-1)[0].data))}). Abaixo, o <b>cronograma vigente</b> já mostra as doses da calibração mais recente; o plano original fica recolhido para consulta.</div>`:'';
   c.innerHTML=_cb+analiseAtual.resultados.map((r,ri)=>{
     const rows=r.linhas.map(l=>{
       const sc=l.status?`st-${l.status}`:'';let d='—';
@@ -1881,7 +1881,7 @@ function recalcFert(ri){
     <div class="necg">${necCards}</div>
     ${linhasProd?`<div style="overflow-x:auto"><table class="saldo-tab"><thead><tr><th>Produto</th><th>Dose/ha</th><th>Total talhão</th><th>A lanço</th><th>Fertirrigação</th></tr></thead><tbody>${linhasProd}</tbody></table></div>`:''}
     ${saldoRows?`<div style="margin:12px 0 4px;font-weight:700;color:var(--cafe);font-size:.85rem">Saldo residual por nutriente:</div><div style="overflow-x:auto"><table class="saldo-tab"><thead><tr><th>Nutriente</th><th>Necessidade</th><th>Aporte</th><th>Saldo</th></tr></thead><tbody>${saldoRows}</tbody></table></div>`:''}
-    ${cronogramaHTML(r,ri)}
+    ${HIST_VIEW&&calTemRi(analiseAtual,ri)?calVigTabelas(analiseAtual,ri,'tela')+`<details style="margin-top:10px"><summary style="cursor:pointer;font-size:.82rem;color:var(--cinza)">Ver cronograma original (antes da calibração pela folha)</summary>${cronogramaHTML(r,ri)}</details>`:cronogramaHTML(r,ri)}
     ${pctL<100&&!(r.parcelamento&&r.parcelamento.ativo&&r.talhao.cultura==='conilon')?fertirrigBox(r,ri,pctL):''}
   `;
 }
@@ -2108,7 +2108,52 @@ function cronogramaHTML(r,ri){
     <div style="padding:8px 12px;font-size:.76rem;color:var(--cinza);line-height:1.5">Critério: adubação distribuída no ano todo, cada parcela recebendo a demanda do período que cobre, pela ${(c.p.curva||'p19')==='p19'?'marcha de absorção mensal de Partelli et al. (2019) — '+P19_GEN_LBL[p19Gen(c.p)]:'tabela de % por fase fenológica'} (editável). Cada produto segue o calendário do seu nutriente-guia. ${mista?'L = a lanço · F = fertirrigação (kg/ha). ':''}Datas e kg/ha editáveis: ao fixar uma parcela, as demais não editadas são recalculadas para manter a dose total (apague o valor para voltar ao automático).</div>
     ${semFert}${av}</div>`;
 }
+
+/* ===== Plano vigente após calibração(ões) pela folha — fonte única: execItens (mesma da Execução e do PDF do produtor) ===== */
+function calTemRi(a,ri){return (a.calibracoes||[]).some(c=>(c.res||[]).some(x=>x.ri===ri));}
+function calPlanoVig(a,ri){const r=a.resultados[ri];const area=parseFloat(r.talhao.area)||1;
+  const orig=execItens(snapCal(a,0),ri);const its=execItens(a,ri);const om={};orig.forEach(o=>om[o.k]=o);
+  its.forEach(it=>{if(!it.extra)it.recOrig=om[it.k]?om[it.k].rec:it.recOrig;});
+  orig.forEach(o=>{if(!its.some(it=>it.k===o.k))its.push({...o,recOrig:o.rec,rec:0});});
+  const NUTS=['N','P','K','S','Ca','Mg','B','Zn','Cu','Mn','Fe'];
+  const linhas=its.map(it=>{const fat=it.un==='t/ha'?1000:1;const cc=it.f?compOf(it.f):{};const nut={};NUTS.forEach(n=>nut[n]=it.rec*fat*(cc[n]||0)/100);
+    const sit=it.extra?'Incluído':it.rec<0.05?'Retirado':Math.abs(it.rec-it.recOrig)>0.05?'Ajustado':'Mantido';
+    return {...it,fat,nut,sit};}).sort((x,y)=>String(x.data||'0').localeCompare(String(y.data||'0')));
+  const ativos=linhas.filter(l=>l.rec>=0.05);
+  const prods=[];ativos.forEach(l=>{const k=l.nome+'|'+(l.via||'solo')+'|'+l.un;if(!prods.find(p=>p.k===k))prods.push({k,nome:l.nome,via:l.via||'solo',un:l.un,cor:/^(cal|ges)/.test(l.k)||(l.f&&isCalc(l.f))});});
+  const meses={};ativos.forEach(l=>{const d=parseIso(l.data);const key=d?d.getFullYear()*100+d.getMonth():999999;
+    const m=meses[key]=meses[key]||{d,datas:new Set(),p:{},nut:{}};m.datas.add(l.data||'—');const k=l.nome+'|'+(l.via||'solo')+'|'+l.un;m.p[k]=(m.p[k]||0)+l.rec;
+    NUTS.forEach(n=>m.nut[n]=(m.nut[n]||0)+l.nut[n]);});
+  const totP={},totP0={};linhas.forEach(l=>{const k=l.nome+'|'+(l.via||'solo')+'|'+l.un;totP[k]=(totP[k]||0)+l.rec;});orig.forEach(o=>{const k=o.nome+'|'+(o.via||'solo')+'|'+o.un;totP0[k]=(totP0[k]||0)+o.rec;});
+  const nuts=NUTS.filter(n=>ativos.some(l=>l.nut[n]>0.05));
+  const ult=(a.calibracoes||[]).filter(c=>(c.res||[]).some(x=>x.ri===ri)).slice(-1)[0];
+  return {linhas,ativos,prods,meses,totP,totP0,nuts,area,ult};}
+const CAL_SIT_COR={'Incluído':'#2E7D4F','Ajustado':'#9a6f1c','Retirado':'#C8102E','Mantido':'#6E6159'};
+function calVigTabelas(a,ri,modo){const V=calPlanoVig(a,ri);if(!V.linhas.length)return '';const f1=x=>x>0.05?x.toFixed(1):'—';
+  const pr=modo==='print';const T=pr?'p-t':'saldo-tab';const N=pr?' class="n"':' style="text-align:right"';
+  const det=V.linhas.map(l=>`<tr${l.sit==='Retirado'?' style="color:#9b8f86;text-decoration:line-through"':''}><td>${l.data?fmtData(parseIso(l.data)):'—'}</td><td>${esc(l.fase)}</td><td><b>${esc(l.nome)}</b></td><td>${l.via==='foliar'?'Foliar':'Solo'}</td>
+    <td${N}>${l.extra?'—':ppN(l.recOrig,l.un==='t/ha'?2:1)}</td><td${N}><b>${ppN(l.rec,l.un==='t/ha'?2:1)}</b> ${l.un}</td><td><span style="color:${CAL_SIT_COR[l.sit]};font-weight:700">${l.sit}</span></td></tr>`).join('');
+  const ks=Object.keys(V.meses).map(Number).sort((x,y)=>x-y);
+  const hP=V.prods.map(p=>`<th${N}>${esc(p.nome)}${p.via==='foliar'?' (folha)':''}<br><small>${p.un}</small></th>`).join('');
+  const hN=V.nuts.map(n=>`<th${N}>${NUT_LABEL[n]}</th>`).join('');
+  const kgHa=(m)=>V.prods.filter(p=>!p.cor).reduce((s0,p)=>s0+(m.p[p.k]||0),0);
+  const mRows=ks.map(k=>{const m=V.meses[k];const t=kgHa(m);return `<tr><td>${m.d?MES_ABR[m.d.getMonth()]+'/'+m.d.getFullYear():'Sem data'}</td><td${N}>${m.datas.size}</td>${V.prods.map(p=>`<td${N}>${f1(m.p[p.k]||0)}</td>`).join('')}<td${N}><b>${f1(t)}</b></td><td${N}>${f1(t*V.area)}</td>${V.nuts.map(n=>`<td${N}>${f1(m.nut[n]||0)}</td>`).join('')}</tr>`;}).join('');
+  const tot={p:{},nut:{}};ks.forEach(k=>{const m=V.meses[k];V.prods.forEach(p=>tot.p[p.k]=(tot.p[p.k]||0)+(m.p[p.k]||0));V.nuts.forEach(n=>tot.nut[n]=(tot.nut[n]||0)+(m.nut[n]||0));});
+  const tKg=V.prods.filter(p=>!p.cor).reduce((s0,p)=>s0+(tot.p[p.k]||0),0);const nAp=ks.reduce((s0,k)=>s0+V.meses[k].datas.size,0);
+  const mTot=`<tr class="tot" style="font-weight:700;background:${pr?'':'var(--neutro)'}"><td>Total</td><td${N}>${nAp}</td>${V.prods.map(p=>`<td${N}>${f1(tot.p[p.k]||0)}</td>`).join('')}<td${N}>${f1(tKg)}</td><td${N}>${f1(tKg*V.area)}</td>${V.nuts.map(n=>`<td${N}>${f1(tot.nut[n]||0)}</td>`).join('')}</tr>`;
+  const mOrig=`<tr style="color:#7A6255"><td colspan="2"><i>Plano original</i></td>${V.prods.map(p=>`<td${N}><i>${f1(V.totP0[p.k]||0)}</i></td>`).join('')}<td colspan="${2+V.nuts.length}"></td></tr>`;
+  const tit=V.ult?`calibração ${V.ult.n} · folha de ${fmtData(parseIso(V.ult.data))}`:'';
+  if(pr)return `<div class="p-sub">Parcelamento por aplicação — ATUALIZADO pela ${tit}</div>
+    <table class="p-t"><thead><tr><th>Data</th><th>Etapa</th><th>Insumo</th><th>Via</th><th class="n">Plano original</th><th class="n">Dose vigente</th><th>Alteração</th></tr></thead><tbody>${det}</tbody></table>
+    <div class="p-sub">Fracionamento mensal — vigente (${tit})</div>
+    <table class="p-t"><thead><tr><th rowspan="2">Mês</th><th rowspan="2" class="n">Nº aplic.</th><th colspan="${V.prods.length}">Insumos (kg/ha)</th><th rowspan="2" class="n">Adubos<br>(kg/ha)</th><th rowspan="2" class="n">Adubos talhão<br>(kg · ${V.area} ha)</th>${V.nuts.length?`<th colspan="${V.nuts.length}">Nutrientes (kg/ha)</th>`:''}</tr><tr>${hP}${hN}</tr></thead><tbody>${mRows}${mTot}${mOrig}</tbody></table>`;
+  return `<div class="parc-box" style="border-color:#BCF0DA"><div class="parc-h" style="background:#2E7D4F"><span>🍃 Cronograma vigente — ${tit}</span></div>
+    <div style="padding:10px 12px 0;font-weight:700;color:var(--cafe);font-size:.85rem">Fracionamento mensal (kg/ha)</div>
+    <div style="overflow-x:auto;padding:0 12px"><table class="${T}"><thead><tr><th>Mês</th><th style="text-align:right">Nº aplic.</th>${hP}<th style="text-align:right">Adubos (kg/ha)</th><th style="text-align:right">Adubos talhão (kg)</th>${hN}</tr></thead><tbody>${mRows}${mTot}${mOrig}</tbody></table></div>
+    <details style="padding:8px 12px 12px"><summary style="cursor:pointer;font-weight:700;color:var(--cafe);font-size:.85rem">Aplicação por aplicação (original → vigente)</summary>
+    <div style="overflow-x:auto"><table class="${T}"><thead><tr><th>Data</th><th>Etapa</th><th>Insumo</th><th>Via</th><th style="text-align:right">Original</th><th style="text-align:right">Vigente</th><th>Alteração</th></tr></thead><tbody>${det}</tbody></table></div></details></div>`;}
 function cronogramaPrint(r,a){
+  {const ri=a.resultados.indexOf(r);if(ri>=0&&calTemRi(a,ri))return calVigTabelas(a,ri,'print');}
   const c=cronograma(r,a);if(!c)return '';
   const area=parseFloat(r.talhao.area)||1;const f1=x=>x>0.05?x.toFixed(1):'—';
   const fe=c.parcelas.length?c.parcelas[0].prods.map((f,j)=>({nome:f.nome,guia:f.guia,j})):[];
@@ -3011,7 +3056,7 @@ function montarPrintProdutor(analises){const pages=[];
     if(temSoloR){pages.push(`<section class="pp">${ppHead(a,r,1,tot,'O que o solo pede','Primeiro olhamos o solo e montamos a adubação do ano.')}
       <h2><span class="pp-n">1</span>Como está o seu solo<small>bolinha = valor da sua análise</small></h2>${ppRegua(['Baixo','Médio','Bom'],['#F8B4B4','#F5D9A8','#BCF0DA'],ppSoloRows(r))}
       <h2><span class="pp-n">2</span>Correção do solo<small>calcário e gesso</small></h2>${ppCorrecao(r,a)}
-      <h2><span class="pp-n">3</span>Calendário de adubação${temFolR?' pelo solo':''}<small>quantidade em kg</small></h2>${ppCalendario(ppEventos(r,a,q0))}
+      <h2><span class="pp-n">3</span>Calendário de adubação${temFolR?' pelo solo':''}<small>${temCal?'plano inicial · versão vigente na página “Ajuste pela folha”':'quantidade em kg'}</small></h2>${ppCalendario(ppEventos(r,a,q0))}
       <h2><span class="pp-n">4</span>Quanto de cada nutriente vai para a lavoura</h2>${ppNutrCards(N0,null,r.necSolo||r.nec)}
       <div class="pp-obs" style="margin-top:1.5mm;color:#13532e"><b>Como aplicar:</b> com o solo úmido, espalhando na projeção da copa. Calcário e gesso antes da 1ª adubação. Não aplique antes de chuva forte.${temFolR?' <b>Na próxima página</b> conferimos este plano com a análise da folha.':''}</div>
       ${ppFoot(a,1,tot)}</section>`);}
@@ -3019,7 +3064,7 @@ function montarPrintProdutor(analises){const pages=[];
       pages.push(`<section class="pp">${ppHead(a,r,pg,tot,temSoloR?'O que a folha confirmou':'O que a folha pede',temSoloR?'Depois conferimos a folha do café e ajustamos o plano para não sobrar nem faltar.':'Recomendação montada a partir da análise da folha.')}
       <h2><span class="pp-n">${n0+1}</span>O que a folha do café está dizendo<small>bolinha = valor da análise foliar</small></h2>${ppRegua(['Falta','Equilibrado','Sobrando'],['#F8B4B4','#BCF0DA','#E9D5FF'],ppFolRows(r))}
       ${temSoloR?`<h2><span class="pp-n">${n0+2}</span>O que mudamos por causa da folha</h2>${ppMudancas(r,q0,q1)}`:''}
-      <h2><span class="pp-n">${n0+(temSoloR?3:2)}</span>Calendário ${temSoloR?'final (ajustado pela folha)':'de adubação'}<small>quantidade em kg</small></h2>${ppCalendario(ppEventos(r,a,q1))}
+      <h2><span class="pp-n">${n0+(temSoloR?3:2)}</span>Calendário ${temSoloR?'final (ajustado pela folha)':'de adubação'}<small>${temCal?'plano da visita · versão vigente na página “Ajuste pela folha”':'quantidade em kg'}</small></h2>${ppCalendario(ppEventos(r,a,q1))}
       <h2><span class="pp-n">${n0+(temSoloR?4:3)}</span>Quanto de cada nutriente vai para a lavoura${temSoloR?' (final)':''}</h2>${ppNutrCards(N1,temSoloR&&N0.tem&&N1.tem?N0.o:null,r.nec)}
       ${ppFoot(a,pg,tot)}</section>`);}
     if(temCal&&(temSoloR||temFolR))pages.push(ppPaginaCalib(a,ri,tot,tot));
