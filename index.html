@@ -983,18 +983,18 @@ function renderTalhoes(){if(document.getElementById('ft-list'))renderFazTal();co
 const FAIXAS={
   p_mehlich:{conilon:{mb:3,b:6,m:12,a:25,ma:999},arabica:{mb:4,b:8,m:16,a:30,ma:999}},
   p_resina:{conilon:{mb:6,b:12,m:25,a:50,ma:999},arabica:{mb:8,b:15,m:30,a:60,ma:999}},
-  k:{conilon:{mb:30,b:60,m:120,a:200,ma:999},arabica:{mb:-1,b:60,m:120,a:200,ma:999}},
-  ca:{conilon:{mb:.5,b:1.5,m:4,a:7,ma:99},arabica:{mb:.5,b:1.2,m:2.4,a:4,ma:99}},
-  mg:{conilon:{mb:.3,b:.8,m:1.5,a:2.5,ma:99},arabica:{mb:.3,b:.6,m:1.2,a:2,ma:99}},
-  s:{conilon:{mb:0,b:5,m:10,a:20,ma:999},arabica:{mb:0,b:5,m:10,a:20,ma:999}},
-  b:{conilon:{mb:.15,b:.3,m:.6,a:1,ma:99},arabica:{mb:.15,b:.3,m:.6,a:1,ma:99}},
-  zn_mehlich:{conilon:{mb:.5,b:1,m:1.6,a:4,ma:99},arabica:{mb:.5,b:1,m:1.6,a:4,ma:99}},
+  k:{conilon:{mb:30,b:59.9,m:120,a:200,ma:999},arabica:{mb:-1,b:60,m:120,a:200,ma:999}},
+  ca:{conilon:{mb:-1,b:1.49,m:4,a:999,ma:999},arabica:{mb:.5,b:1.2,m:2.4,a:4,ma:99}},
+  mg:{conilon:{mb:-1,b:.49,m:1,a:999,ma:999},arabica:{mb:.3,b:.6,m:1.2,a:2,ma:99}},
+  s:{conilon:{mb:-1,b:4.99,m:10,a:999,ma:999},arabica:{mb:0,b:5,m:10,a:20,ma:999}},
+  b:{conilon:{mb:-1,b:.199,m:.6,a:999,ma:999},arabica:{mb:.15,b:.3,m:.6,a:1,ma:99}},
+  zn_mehlich:{conilon:{mb:-1,b:1.99,m:6,a:999,ma:999},arabica:{mb:.5,b:1,m:1.6,a:4,ma:99}},
   zn_dtpa:{conilon:{mb:.3,b:.6,m:1.2,a:3,ma:99},arabica:{mb:.3,b:.6,m:1.2,a:3,ma:99}},
-  cu_mehlich:{conilon:{mb:.3,b:.6,m:1.2,a:4,ma:99},arabica:{mb:.3,b:.6,m:1.2,a:4,ma:99}},
+  cu_mehlich:{conilon:{mb:-1,b:.499,m:1.5,a:999,ma:999},arabica:{mb:.3,b:.6,m:1.2,a:4,ma:99}},
   cu_dtpa:{conilon:{mb:.2,b:.4,m:.8,a:2,ma:99},arabica:{mb:.2,b:.4,m:.8,a:2,ma:99}},
-  fe_mehlich:{conilon:{mb:10,b:20,m:40,a:80,ma:999},arabica:{mb:10,b:20,m:40,a:80,ma:999}},
+  fe_mehlich:{conilon:{mb:-1,b:19.99,m:30,a:999,ma:999},arabica:{mb:10,b:20,m:40,a:80,ma:999}},
   fe_dtpa:{conilon:{mb:4,b:8,m:18,a:40,ma:999},arabica:{mb:4,b:8,m:18,a:40,ma:999}},
-  mn_mehlich:{conilon:{mb:3,b:8,m:15,a:30,ma:999},arabica:{mb:3,b:8,m:15,a:30,ma:999}},
+  mn_mehlich:{conilon:{mb:-1,b:4.99,m:15,a:999,ma:999},arabica:{mb:3,b:8,m:15,a:30,ma:999}},
   mn_dtpa:{conilon:{mb:2,b:5,m:10,a:20,ma:999},arabica:{mb:2,b:5,m:10,a:20,ma:999}}
 };
 function interp(v,f){if(v===null||v==='')return null;v=parseFloat(v);if(isNaN(v))return null;
@@ -1007,8 +1007,15 @@ function interp(v,f){if(v===null||v==='')return null;v=parseFloat(v);if(isNaN(v)
    Classes [MB, B, Médio, Bom] (limite superior, mg/dm³) — CFSEMG 5ª Aprox. (Alvarez V. et al., 1999). Editável. */
 const P_MEH_PREM=[{ate:4,f:[3,4.3,6,9]},{ate:10,f:[4,6,8.3,12.5]},{ate:19,f:[6,8.3,11.4,17.5]},{ate:30,f:[8,11.4,15.8,24]},{ate:44,f:[11,15.8,21.8,33]},{ate:999,f:[15,21.8,30,45]}];
 const P_MEH_ARG=[{ate:15,f:[10,20,30,45]},{ate:35,f:[6.6,12,20,30]},{ate:60,f:[4,8,12,18]},{ate:100,f:[2.7,5.4,8,12]}];
+/* Conilon · Mehlich-1 — Tab. 9 (Prezotti et al., 2007): classes de P conforme P-rem / classe textural */
+const P_CON_T9={arg:{f:{mb:2.99,b:6.99,m:10,a:999,ma:999},t:'argilosa (P-rem < 20)'},med:{f:{mb:4.99,b:10.99,m:20,a:999,ma:999},t:'média (P-rem 20–40)'},are:{f:{mb:9.99,b:20.99,m:30,a:999,ma:999},t:'arenosa (P-rem > 40)'}};
 function faixaP(cult,ext,prem,arg){
   if(ext==='resina')return {f:FAIXAS.p_resina[cult],ref:'Resina (tabela fixa)'};
+  if(cult==='conilon'){const pr=parseFloat(prem),ag=parseFloat(arg);let k,ref;
+    if(!isNaN(pr)&&pr>0){k=pr<20?'arg':pr<=40?'med':'are';ref=`P-rem ${pr} mg/L → textura ${P_CON_T9[k].t}`;}
+    else if(!isNaN(ag)&&ag>0){k=ag>35?'arg':ag>=15?'med':'are';ref=`argila ${ag}% → textura ${P_CON_T9[k].t.split(' (')[0]} (P-rem não informado)`;}
+    else{k='med';ref='P-rem não informado → textura média (informe o P-rem)';}
+    return {f:P_CON_T9[k].f,ref:`Mehlich-1 · ${ref} · Tab. 9 Incaper`};}
   const pr=parseFloat(prem),ag=parseFloat(arg);let L=null,ref='';
   if(!isNaN(pr)&&pr>0){L=P_MEH_PREM.find(x=>pr<=x.ate);ref=`Mehlich-1 · P-rem ${pr} mg/L`;}
   else if(!isNaN(ag)&&ag>0){L=P_MEH_ARG.find(x=>ag<=x.ate)||P_MEH_ARG[3];ref=`Mehlich-1 · argila ${ag}%`;}
@@ -1019,7 +1026,17 @@ function faixaStr(f){return `MB≤${f.mb} / B–${f.b} / M–${f.m} / Bom–${f.
 /* ============================================================
    MOTOR calcDose (Conilon: Incaper 5ª ; Arábica: CFSEMG 5ª)
    ============================================================ */
-const N_MAX=500; // teto de N (kg/ha/ano) — editável
+const N_MAX=500; // teto de N (kg/ha/ano) — aplica-se ao arábica; conilon segue a Tab. 8 (até 620)
+/* Café conilon em produção — Prezotti et al. (2007), Café Conilon cap. 12 (Incaper) */
+const CON_PROD=[20,30,50,70,100,130,170,1e9];
+const CON_PROD_LBL=['≤20','21–30','31–50','51–70','71–100','101–130','131–170','>170'];
+const CON_N=[200,260,320,380,440,500,560,620];                                  // Tab. 8 · kg N/ha/ano
+const CON_K=[[170,100,30,0],[230,160,90,0],[290,220,150,0],[350,280,210,80],[410,340,270,140],[470,400,330,200],[530,460,390,260],[600,520,450,320]]; // Tab. 8 · K solo <60 | 60–120 | 120–200 | >200
+const CON_P=[[30,20,0,0],[45,35,0,0],[60,45,0,0],[75,60,20,0],[90,75,35,0],[105,90,50,20],[120,105,65,40],[140,120,80,60]]; // Tab. 9 · P MB | B | M | A
+const CON_MIC={zn:{b:3,m:2},b:{b:2,m:1},cu:{b:3,m:2},mn:{b:15,m:10}};            // Tab. 10 · kg/ha (baixo | médio)
+const conRow=prod=>CON_PROD.findIndex(x=>(parseFloat(prod)||0)<=x);
+const kColCon=v=>{v=parseFloat(v);return v<60?0:v<=120?1:v<=200?2:3;};
+const K_COL_LBL=['<60','60–120','120–200','>200'];
 const K_EXPORT=2.4; // kg K₂O exportado por saca (grão+casca) — editável
 const K_SAT_MIN=3;  // % mínima de K na CTC — editável
 /* Café Arábica em produção — 5ª Aproximação CFSEMG (Guimarães et al., 1999).
@@ -1044,7 +1061,7 @@ const arabFx=prod=>{const i=ARAB_5A.indexOf(arabLinha(prod));return i===0?'≤20
    ============================================================ */
 const FORM_TAB={
   arabica:{1:{N:20,P:[20,10,0],K:[20,10,0]},2:{N:40,P:[20,10,0],K:[40,20,0]}},
-  conilon:{1:{N:30,P:[30,20,10],K:[30,20,10]},2:{N:60,P:[30,20,10],K:[60,40,20]}}
+  conilon:{1:{N:30,P:[30,20,10],K:[60,30,15,0]},2:{N:60,P:[30,20,10],K:[90,60,30,0]}} // N e K: Tab. 7 Incaper (g/planta/aplicação × 3 aplicações)
 };
 const FORM_PL={arabica:4000,conilon:3333}; // plantas/ha padrão (editável no talhão)
 let FORM_CTX=null; // {pl,ano} do talhão em cálculo
@@ -1057,7 +1074,7 @@ function calcDose(cult,est,nut,valor,extr,prod,ctc,vb,al,pRem){
     if(nut==='n'){const F=formDose(cult,'N');return{dose:F.kg,unidade:'kg N/ha/ano',obs:`Formação: ${F.txt}. Parcelar 3–4× no período chuvoso, em cobertura ao redor da planta. ${ref}.`};}
     const v=parseFloat(valor);const fk=nut==='p'?(extr==='resina'?'p_resina':'p_mehlich'):'k';
     const it=interp(v,nut==='p'?((arguments[10]&&arguments[10].f)||FAIXAS[fk][cult]):FAIXAS.k[cult]);if(!it)return null;
-    const F=formDose(cult,nut==='p'?'P':'K',formCls(it.status));
+    const F=formDose(cult,nut==='p'?'P':'K',(cult==='conilon'&&nut==='k')?kColCon(v):formCls(it.status));
     return{dose:F.kg,unidade:nut==='p'?'kg P₂O₅/ha':'kg K₂O/ha',obs:F.kg?`Formação · ${nut.toUpperCase()} ${it.label}: ${F.txt}. ${ref}.`:`Formação · ${nut.toUpperCase()} ${it.label}: sem aplicação. ${ref}.`};}
   const v=parseFloat(valor);prod=parseFloat(prod)||0;
   if(nut==='calagem'){
@@ -1074,13 +1091,16 @@ function calcDose(cult,est,nut,valor,extr,prod,ctc,vb,al,pRem){
   }
   if(nut==='n'){
     if(cult==='conilon'){if(est==='formacao')return{dose:80,unidade:'kg N/ha/ano',obs:'Formação (1º-2º ano). Fracionar 3× no período chuvoso. Incaper cap.12.'};
-      const d=Math.min(N_MAX,prod<20?100:prod<40?150:prod<60?200:prod<80?250:prod<100?300:prod<120?350:prod<140?400:prod<160?450:500);
-      return{dose:d,unidade:'kg N/ha/ano',obs:prod>=100?`Acima de 100 sc/ha: +50 kg N a cada 20 sc (extrapolação da escala Incaper), teto ${N_MAX} kg N/ha. Parcelar (até 12×).`:'Fracionar 3×: floração, chumbinho, granação. Incaper Tab.6.'};}
+      const i=conRow(prod);const d=CON_N[i];
+      return{dose:d,unidade:'kg N/ha/ano',obs:`Produtividade ${CON_PROD_LBL[i]} sc/ha → ${d} kg N/ha/ano. Mínimo de 3 parcelas no período chuvoso. Incaper (Prezotti et al., 2007) Tab. 8.`};}
     if(cult==='arabica'){if(est==='formacao')return{dose:40,unidade:'kg N/ha/ano',obs:'Formação. Fracionar 2-3×. CFSEMG 1999.'};
       const d=Math.min(N_MAX,arabLinha(prod).N);
       return{dose:d,unidade:'kg N/ha/ano',obs:`5ª Aprox. CFSEMG — faixa ${arabFx(prod)}. Parcelar no período chuvoso.`};}
   }
   if(nut==='p'){const fk=extr==='resina'?'p_resina':'p_mehlich';const it=interp(v,(arguments[10]&&arguments[10].f)||FAIXAS[fk][cult]);if(!it)return null;
+    if(cult==='conilon'&&extr!=='resina'){const i=conRow(prod);const col={'muito-baixo':0,'baixo':1,'adequado':2,'alto':3,'muito-alto':3}[it.status];const d=CON_P[i][col];
+      const cl=['Muito baixo','Baixo','Médio','Alto'][col];
+      return{dose:d,unidade:'kg P₂O₅/ha',obs:`P ${cl} · ${CON_PROD_LBL[i]} sc/ha → ${d?d+' kg P₂O₅/ha/ano':'sem aplicação'}. Pode ir em dose única com a 1ª parcela de N e K (floração). Incaper Tab. 9.`};}
     if(cult==='conilon'){const dm=prod<20?60:prod<40?80:prod<60?100:prod<80?120:140;
       if(it.status==='alto'||it.status==='muito-alto')return{dose:0,unidade:'kg P₂O₅/ha',obs:'P alto — sem aplicação. Incaper.'};
       if(it.status==='adequado')return{dose:Math.round(dm*.5),unidade:'kg P₂O₅/ha',obs:'Manutenção (50%). Incaper.'};
@@ -1095,9 +1115,9 @@ function calcDose(cult,est,nut,valor,extr,prod,ctc,vb,al,pRem){
     const T=parseFloat(ctc);const satK=(!isNaN(T)&&T>0)?(v/391)/T*100:null;
     const kRep=Math.round(prod*K_EXPORT);const sTxt=satK!=null?` · K/CTC=${satK.toFixed(1)}%`:'';
     let d,ref;
-    if(cult==='conilon'){const db=prod<20?60:prod<40?90:prod<60?120:prod<80?150:prod<100?180:prod<120?210:240;
-      d={'muito-baixo':db*1.5,'baixo':db,'adequado':db*.75,'alto':kRep,'muito-alto':0}[it.status];ref='Incaper';
-    }else{const L=arabLinha(prod);const ix={'muito-baixo':0,'baixo':0,'adequado':1,'alto':2,'muito-alto':3}[it.status];d=L.K[ix];ref=`5ª Aprox. CFSEMG (${arabFx(prod)})`;}
+    if(cult==='conilon'){const i=conRow(prod),j=kColCon(v);const dk=CON_K[i][j];
+      return{dose:dk,unidade:'kg K₂O/ha',obs:`K no solo ${K_COL_LBL[j]} mg/dm³ · ${CON_PROD_LBL[i]} sc/ha → ${dk?dk+' kg K₂O/ha/ano':'sem aplicação'}${sTxt}. Mínimo de 3 parcelas no período chuvoso. Incaper Tab. 8.`};}
+    {const L=arabLinha(prod);const ix={'muito-baixo':0,'baixo':0,'adequado':1,'alto':2,'muito-alto':3}[it.status];d=L.K[ix];ref=`5ª Aprox. CFSEMG (${arabFx(prod)})`;}
     let obs=`K ${it.label}${sTxt}. ${ref}.`;
     if(it.status!=='muito-alto'&&d<kRep){d=kRep;obs+=` Elevado ao piso de reposição (${K_EXPORT} kg K₂O/sc × ${prod} sc).`;}
     if(it.status==='muito-alto'){
@@ -1106,6 +1126,14 @@ function calcDose(cult,est,nut,valor,extr,prod,ctc,vb,al,pRem){
     else if(satK!=null&&satK<K_SAT_MIN){d=Math.round(d*1.2);obs+=` K/CTC <${K_SAT_MIN}% → +20%.`;}
     d=Math.round(d);
     return{dose:d,unidade:'kg K₂O/ha',obs};}
+  if(nut==='ca'&&cult==='conilon'){if(isNaN(v))return null;if(v>=2.4)return{dose:0,unidade:'kg Ca/ha',obs:'Ca ≥ 2,4 cmolc/dm³ (mínimo para o conilon) — sem correção. Incaper.'};
+    const dc=2.4-v;return{dose:Math.round(dc*400),unidade:'kg Ca/ha',obs:`Ca abaixo do mínimo de 2,4 cmolc/dm³ (Incaper); faltam ${dc.toFixed(1)} cmolc × 400 kg Ca/ha (0–20 cm). Fonte: calcário ou outra fonte de Ca. Relação Ca:Mg ideal ≈ 4:1.`};}
+  if(nut==='mg'&&cult==='conilon'){if(isNaN(v))return null;if(v>=0.8)return{dose:0,unidade:'kg Mg/ha',obs:'Mg ≥ 0,8 cmolc/dm³ (mínimo para o conilon) — sem correção. Incaper.'};
+    const dc=0.8-v;return{dose:Math.round(dc*240),unidade:'kg Mg/ha',obs:`Mg abaixo do mínimo de 0,8 cmolc/dm³ (Incaper); faltam ${dc.toFixed(1)} cmolc × 240 kg Mg/ha (0–20 cm). Fonte: calcário dolomítico, sulfato/óxido de Mg.`};}
+  if(['zn','b','cu','mn'].includes(nut)&&cult==='conilon'&&(nut==='b'||extr!=='dtpa')){const fk=nut==='b'?'b':nut+'_mehlich';const it=interp(v,FAIXAS[fk].conilon);if(!it)return null;
+    const T=CON_MIC[nut];const d=it.status==='baixo'||it.status==='muito-baixo'?T.b:it.status==='adequado'?T.m:0;const U=nut==='b'?'B':nut==='zn'?'Zn':nut==='cu'?'Cu':'Mn';
+    const src={zn:'sulfato de zinco (23% Zn)',b:'ácido bórico (17% B)',cu:'sulfato de cobre (25% Cu)',mn:'sulfato de manganês (27% Mn)'}[nut];
+    return{dose:d,unidade:`kg ${U}/ha`,obs:d?`${U} ${it.status==='adequado'?'Médio':'Baixo'} no solo → ${d} kg ${U}/ha no início do florescimento, via ${src}. Incaper Tab. 10.`:`${U} Alto no solo — sem aplicação. Incaper Tab. 10.`};}
   if(nut==='ca'){const it=interp(v,FAIXAS.ca[cult]);if(!it)return null;
     if(['adequado','alto','muito-alto'].includes(it.status))return{dose:0,unidade:'cmolc/dm³',obs:`Ca ${it.label} — corrigir via calagem se preciso.`};
     const alvo=cult==='arabica'?1.2:2.4;const dc=Math.max(0,alvo-v);return{dose:Math.round(dc*400),unidade:'kg Ca/ha',obs:`Ca abaixo (alvo ${alvo} cmolc/dm³; faltam ${dc.toFixed(1)} cmolc × 400 kg Ca/ha, 0–20 cm). Fonte: calcário (calcítico/dolomítico) ou outra fonte de Ca.`};}
@@ -1617,7 +1645,7 @@ function linhasFolha(t,fo,prod,nec,linhas){const c=t.cultura,e=t.estagio;const s
     linhas.push({...base(n,st),nut:nm,dose:{dose:0,unidade:'',obs:st==='def'?`Folha deficiente → corrigir via calagem${n==='Mg'?' com calcário dolomítico/sulfato de Mg':''}; confirme a dose com análise de solo.`:'Sem correção indicada pela folha.'}});});
   // micros
   [['B','b','b','B – Boro'],['Zn','zn','zn_mehlich','Zn – Zinco'],['Cu','cu','cu_mehlich','Cu – Cobre'],['Fe','fe','fe_mehlich','Fe – Ferro'],['Mn','mn','mn_mehlich','Mn – Manganês']].forEach(([n,id,fk,nm])=>{
-    const st=folStatus(fo,n);if(!st)return;const cls=FOL2CLS[st];let r=calcDose(c,e,id,valClasse(FAIXAS[fk][c],cls),'mehlich',prod);if(!r)return;r={...r};
+    const st=folStatus(fo,n);if(!st)return;const cls=FOL2CLS[st];let r=calcDose(c,e,id,valClasse(FAIXAS[fk][c],cls),'mehlich',prod);if(!r)return;r={...r};if(st!=='def')r.dose=0;
     r.obs=st==='def'?`Folha deficiente → dose via solo da classe "Baixo". Alternativa: ${microFonte[n]||'via foliar'}.`:`Folha ${FOL_ST_LBL[st].toLowerCase()} — sem aplicação via solo.`;
     linhas.push({...base(n,st),nut:nm,dose:r});nec[n]=r.dose;});
   linhas.push({nut:'Calagem',faixa:'—',valor:'—',status:'info',stLabel:'Não calculada',dose:{dose:0,unidade:'',obs:'Calagem depende da análise de solo (V%, CTC, Al³⁺). Use "Solo" ou "Solo + Folha" para calculá-la.'}});
